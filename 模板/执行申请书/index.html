@@ -4,31 +4,148 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>法律文书模板 - 法律知识库</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Noto Sans SC', sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
-        h1 { color: #1a73e8; }
-        .back { display: inline-block; margin-bottom: 20px; color: #666; text-decoration: none; }
-        .card { background: #f8f9fa; padding: 15px; margin: 10px 0; border-radius: 8px; }
+        :root { --primary: #1a73e8; --dark: #1f1f1f; --gray: #666; --light: #f8f9fa; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans SC', sans-serif; background: var(--light); color: var(--dark); line-height: 1.8; }
+        .header { background: linear-gradient(135deg, #1a73e8 0%, #667eea 100%); color: white; padding: 40px 20px; text-align: center; }
+        .header a { color: white; text-decoration: none; }
+        .container { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+        .back { display: inline-block; margin-bottom: 20px; color: var(--primary); text-decoration: none; }
+        .section { background: white; padding: 25px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .section h2 { color: var(--primary); margin-bottom: 15px; font-size: 1.4rem; }
+        pre { background: #f5f5f5; padding: 15px; border-radius: 8px; overflow-x: auto; font-size: 0.85rem; line-height: 1.6; white-space: pre-wrap; }
+        .tip { background: #fff3e0; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #ff9800; }
+        .warning { background: #ffebee; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #f44336; }
     </style>
 </head>
 <body>
-    <a href="../../index.html" class="back">← 返回首页</a>
-    <h1>📄 法律文书模板</h1>
-    <div class="card">
-        <h3>执行申请书</h3>
-        <p>民事执行申请书标准模板...</p>
-    </div>
-    <div class="card">
-        <h3>协助执行通知书</h3>
-        <p>协助执行通知书模板...</p>
-    </div>
-    <div class="card">
-        <h3>执行异议申请书</h3>
-        <p>执行异议申请书模板...</p>
-    </div>
-    <div class="card">
-        <h3>和解协议模板</h3>
-        <p>执行和解协议模板...</p>
+    <header class="header">
+        <a href="../../index.html">← 返回首页</a>
+        <h1>📄 法律文书模板</h1>
+        <p>执行申请书、起诉状等标准模板</p>
+    </header>
+    
+    <div class="container">
+        <a href="../../index.html" class="back">← 返回首页</a>
+        
+        <div class="section">
+            <h2>📝 执行申请书（模板）</h2>
+            <pre>执行申请书
+
+申请人：XXX，男/女，XX年XX月XX日生，汉族，住XXXXXXXX
+身份证号码：XXXXXXXXXXXXXXXXXX
+电话：XXXXXXXXXXX
+
+被执行人：XXX，男/女，XX年XX月XX日生，汉族，住XXXXXXXX
+身份证号码：XXXXXXXXXXXXXXXXXX
+电话：XXXXXXXXXXX
+
+请求事项：
+1. 请求强制被执行人支付申请人借款本金人民币XX万元及利息（利息计算方式：...）
+2. 请求强制被执行人加倍支付迟延履行期间的债务利息
+3. 本案执行费用由被执行人承担
+
+事实与理由：
+申请人与被执行人因民间借贷纠纷一案，经XX市XX区人民法院于XXXX年XX月XX日作出（XXXX）XX民初字第XXXX号民事判决书/调解书，该判决/调解书已经发生法律效力。被执行人未按判决/调解书履行义务，现申请强制执行。
+
+此致
+XX市XX区人民法院
+
+申请人：XXX（签名）
+XXXX年XX月XX日
+
+附：1. 执行申请书副本X份
+2. 生效法律文书复印件
+3. 申请人身份证复印件</pre>
+            <div class="warning">
+                <strong>⚠️ 注意：</strong>模板仅供参考，具体案件请根据实际情况修改，建议咨询专业律师
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📋 执行异议申请书（模板）</h2>
+            <pre>执行异议申请书
+
+异议人（案外人）：XXX，男/女，XX年XX月XX日生，汉族，住XXXXXXXX
+身份证号码：XXXXXXXXXXXXXXXXXX
+电话：XXXXXXXXXXX
+
+申请执行人：XXX
+被执行人：XXX
+
+异议事项：
+请求法院中止对位于XXXXXXXX房产的执行
+
+事实与理由：
+异议人于XXXX年XX月XX日与被执行人签订《房屋买卖合同》，购买被执行人位于XXXXXXXX的房产，已支付全部房款并实际入住。因被执行人原因未办理过户登记，现该房产被法院查封执行。
+
+异议人认为，异议人已支付全部房款并实际占有房屋，未办理过户登记非异议人原因，请求法院中止对该房产的执行。
+
+此致
+XX市XX区人民法院
+
+异议人：XXX（签名）
+XXXX年XX月XX日</pre>
+        </div>
+        
+        <div class="section">
+            <h2>🤝 执行和解协议（模板）</h2>
+            <pre>执行和解协议
+
+甲方（申请执行人）：XXX
+乙方（被执行人）：XXX
+
+经甲乙双方协商，就（XXXX）XX执字第XXXX号执行案件达成如下和解协议：
+
+一、乙方确认欠甲方人民币XX万元，扣除已支付的XX万元，剩余XX万元
+二、乙方承诺按以下方式分期支付：
+   第一期：XXXX年XX月XX日前支付XX元
+   第二期：XXXX年XX月XX日前支付XX元
+   ...
+三、如乙方未按上述约定履行，甲方有权申请恢复原判决/调解书的执行
+四、本协议一式三份，甲乙双方各执一份，法院留存一份
+五、本协议经双方签字后生效
+
+甲方：XXX（签名）    乙方：XXX（签名）
+XXXX年XX月XX日</pre>
+        </div>
+        
+        <div class="section">
+            <h2>📜 民事起诉状（模板）</h2>
+            <pre>民事起诉状
+
+原告：XXX，男/女，XX年XX月XX日生，汉族，住XXXXXXXX
+身份证号码：XXXXXXXXXXXXXXXXXX
+电话：XXXXXXXXXXX
+
+被告：XXX，男/女，XX年XX月XX日生，汉族，住XXXXXXXX
+身份证号码：XXXXXXXXXXXXXXXXXX
+电话：XXXXXXXXXXX
+
+诉讼请求：
+1. 判令被告偿还原告借款本金人民币XX万元及利息（利息计算方式：...）
+2. 诉讼费用由被告承担
+
+事实与理由：
+原、被告系朋友/同事关系。XXXX年XX月XX日，被告以资金周转为由向原告借款XX万元，约定XXXX年XX月XX日归还。原告通过银行转账/现金方式向被告提供借款，被告出具借条。但到期后被告未按约定还款，原告多次催要无果。
+
+综上，为维护原告合法权益，特向贵院提起诉讼，请求依法支持原告诉讼请求。
+
+此致
+XX市XX区人民法院
+
+原告：XXX（签名）
+XXXX年XX月XX日
+
+附：1. 起诉状副本X份
+2. 证据材料清单及复印件</pre>
+        </div>
+        
+        <div class="tip">
+            <strong>💡 使用说明：</strong>以上模板仅供参考，具体案件情况不同，请根据实际情况调整或咨询专业律师
+        </div>
     </div>
 </body>
 </html>
