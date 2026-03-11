@@ -4,27 +4,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>典型案例分析 - 法律知识库</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Noto Sans SC', sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
-        h1 { color: #1a73e8; }
-        .back { display: inline-block; margin-bottom: 20px; color: #666; text-decoration: none; }
-        .card { background: #f8f9fa; padding: 15px; margin: 10px 0; border-radius: 8px; }
+        :root { --primary: #1a73e8; --dark: #1f1f1f; --gray: #666; --light: #f8f9fa; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans SC', sans-serif; background: var(--light); color: var(--dark); line-height: 1.8; }
+        .header { background: linear-gradient(135deg, #1a73e8 0%, #667eea 100%); color: white; padding: 40px 20px; text-align: center; }
+        .header a { color: white; text-decoration: none; }
+        .container { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+        .back { display: inline-block; margin-bottom: 20px; color: var(--primary); text-decoration: none; }
+        .section { background: white; padding: 25px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .section h2 { color: var(--primary); margin-bottom: 15px; font-size: 1.4rem; }
+        .section h3 { margin: 20px 0 10px; font-size: 1.1rem; }
+        .case { border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+        .case-title { font-weight: 600; color: var(--primary); margin-bottom: 10px; }
+        .case-tag { display: inline-block; background: #e3f2fd; color: var(--primary); padding: 3px 10px; border-radius: 15px; font-size: 0.8rem; margin-right: 10px; }
+        .tip { background: #fff3e0; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #ff9800; }
     </style>
 </head>
 <body>
-    <a href="../../index.html" class="back">← 返回首页</a>
-    <h1>📋 典型案例分析</h1>
-    <div class="card">
-        <h3>民间借贷执行案例</h3>
-        <p>民间借贷纠纷典型案例与执行要点...</p>
-    </div>
-    <div class="card">
-        <h3>房产纠纷执行案例</h3>
-        <p>房产查封、拍卖典型案例...</p>
-    </div>
-    <div class="card">
-        <h3>劳动仲裁执行案例</h3>
-        <p>劳动争议仲裁执行案例分析...</p>
+    <header class="header">
+        <a href="../../index.html">← 返回首页</a>
+        <h1>📋 典型案例分析</h1>
+        <p>民间借贷、合同纠纷案例深度解析</p>
+    </header>
+    
+    <div class="container">
+        <a href="../../index.html" class="back">← 返回首页</a>
+        
+        <div class="section">
+            <h2>💰 民间借贷执行案例</h2>
+            
+            <div class="case">
+                <div class="case-title">案例一：仅有借条能否胜诉？</div>
+                <span class="case-tag">民间借贷</span>
+                <span class="case-tag">证据规则</span>
+                <p><strong>案情：</strong>原告仅持有借条起诉，被告缺席判决</p>
+                <p><strong>结果：</strong>原告仅凭借条主张债权，法院判决需结合转账记录、聊天记录等证据综合认定</p>
+                <p><strong>要点：</strong>民间借贷纠纷中，借条+转账记录才能形成完整证据链</p>
+            </div>
+            
+            <div class="case">
+                <div class="case-title">案例二：职业放贷人效力认定</div>
+                <span class="case-tag">民间借贷</span>
+                <span class="case-tag">合同无效</span>
+                <p><strong>案情：</strong>原告多次向不特定对象放贷，被认定为职业放贷人</p>
+                <p><strong>结果：</strong>法院认定借贷合同无效，只支持返还本金</p>
+                <p><strong>要点：</strong>职业放贷人的借贷合同不受法律保护</p>
+            </div>
+            
+            <div class="case">
+                <div class="case-title">案例三：夫妻共同债务认定</div>
+                <span class="case-tag">夫妻债务</span>
+                <span class="case-tag">共同债务</span>
+                <p><strong>案情：</strong>丈夫个人借款，妻子主张不知情</p>
+                <p><strong>结果：</strong>借款用于家庭共同生活，认定为夫妻共同债务</p>
+                <p><strong>要点：</strong>超出家庭日常生活需要的借款，需证明用于共同生活或共同生产经营</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🏠 房产纠纷执行案例</h2>
+            
+            <div class="case">
+                <div class="case-title">案例一：唯一住房能否执行？</div>
+                <span class="case-tag">房产执行</span>
+                <span class="case-tag">唯一住房</span>
+                <p><strong>案情：</strong>被执行人只有一套住房能否强制执行？</p>
+                <p><strong>结果：</strong>唯一住房可以执行，但需保障被执行人基本居住需求</p>
+                <p><strong>要点：</strong>符合条件的情况下，法院可以强制执行唯一住房</p>
+            </div>
+            
+            <div class="case">
+                <div class="case-title">案例二：共有房产分割</div>
+                <span class="case-tag">房产纠纷</span>
+                <span class="case-tag">共有</span>
+                <p><strong>案情：</strong>被执行人与他人共有房产如何处置？</p>
+                <p><strong>结果：</strong>法院可以执行被执行人份额，拍卖后保留共有人份额</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>💼 劳动仲裁执行案例</h2>
+            
+            <div class="case">
+                <div class="case-title">案例一：未签合同双倍工资</div>
+                <span class="case-tag">劳动仲裁</span>
+                <span class="case-tag">双倍工资</span>
+                <p><strong>案情：</strong>工作一年未签劳动合同，离职后主张双倍工资</p>
+                <p><strong>结果：</strong>仲裁支持11个月双倍工资差额</p>
+                <p><strong>要点：</strong>用人单位自用工之日起超过一个月不满一年未签合同，应支付双倍工资</p>
+            </div>
+            
+            <div class="case">
+                <div class="case-title">案例二：违法解除赔偿金</div>
+                <span class="case-tag">劳动仲裁</span>
+                <span class="case-tag">赔偿金</span>
+                <p><strong>案情：</strong>公司违法解除劳动合同，员工主张赔偿金</p>
+                <p><strong>结果：</strong>仲裁按经济补偿金的2倍支持赔偿金</p>
+            </div>
+        </div>
+        
+        <div class="tip">
+            <strong>💡 提示：</strong>以上案例仅供参考，具体案件情况不同，建议咨询专业律师
+        </div>
     </div>
 </body>
 </html>
