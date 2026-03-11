@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>诉讼费计算器 - 法律知识库</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #1a73e8; --primary-dark: #1557b0; --success: #34a853; --light: #f8f9fa; --dark: #1f1f1f; --gray: #6c757d; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans SC', sans-serif; background: var(--light); color: var(--dark);header { background: linear-gradient(135 }
+        
+        .deg, #1a73e8 0%, #667eea 100%); color: white; padding: 30px 20px; text-align: center; }
+        .header a { color: white; text-decoration: none; }
+        
+        .container { max-width: 800px; margin: 0 auto; padding: 30px 20px; }
+        
+        .tabs { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+        .tab { padding: 12px 20px; background: white; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.3s; }
+        .tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        
+        .form-section { display: none; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .form-section.active { display: block; }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+        .form-group input, .form-group select { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; }
+        .form-group input:focus { outline: none; border-color: var(--primary); }
+        
+        .btn-submit { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; }
+        
+        .result { display: none; margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 12px; border-left: 5px solid var(--success); }
+        .result.show { display: block; }
+        .result .amount { font-size: 2.5rem; font-weight: 700; color: var(--success); }
+        
+        .disclaimer { margin-top: 20px; padding: 15px; background: #fff3e0; border-radius: 8px; font-size: 0.85rem; color: #e65100; }
+        .footer { text-align: center; padding: 20px; color: var(--gray); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html">← 返回首页</a>
+        <h1>⚖️ 诉讼费计算器</h1>
+        <p>财产/离婚/劳动争议案件诉讼费精准计算</p>
+    </header>
+    
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" data-tab="property">财产案件</div>
+            <div class="tab" data-tab="divorce">离婚案件</div>
+            <div class="tab" data-tab="labor">劳动争议</div>
+            <div class="tab" data-tab="execution">执行费</div>
+        </div>
+        
+        <!-- 财产案件 -->
+        <div class="form-section active" id="property">
+            <div class="form-group">
+                <label>案件标的金额（元） *</label>
+                <input type="number" id="property-amount" placeholder="请输入标的金额">
+            </div>
+            <button class="btn-submit" onclick="calculateProperty()">计算诉讼费</button>
+            <div class="result" id="property-result">
+                <h3>💰 诉讼费</h3>
+                <div class="amount" id="property-total">¥0</div>
+                <p style="margin-top:10px;font-size:0.9rem;color:#666;">案件受理费：¥<span id="property-fee">0</span></p>
+            </div>
+        </div>
+        
+        <!-- 离婚案件 -->
+        <div class="form-section" id="divorce">
+            <div class="form-group">
+                <label>是否</label>
+                涉及财产分割<select id="divorce-property">
+                    <option value="no">不涉及财产分割</option>
+                    <option value="yes">涉及财产分割</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>财产标的金额（元）</label>
+                <input type="number" id="divorce-amount" placeholder="请输入财产金额">
+            </div>
+            <button class="btn-submit" onclick="calculateDivorce()">计算诉讼费</button>
+            <div class="result" id="divorce-result">
+                <div class="amount" id="divorce-total">¥0</div>
+            </div>
+        </div>
+        
+        <!-- 劳动争议 -->
+        <div class="form-section" id="labor">
+            <div class="form-group">
+                <label>案件类型</label>
+                <select id="labor-type">
+                    <option value="appeal">劳动仲裁</option>
+                    <option value="lawsuit">一审</option>
+                    <option value="appeal2">二审</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>标的金额（元）</label>
+                <input type="number" id="labor-amount" placeholder="请输入标的金额">
+            </div>
+            <button class="btn-submit" onclick="calculateLabor()">计算诉讼费</button>
+            <div class="result" id="labor-result">
+                <div class="amount" id="labor-total">¥0</div>
+            </div>
+        </div>
+        
+        <!-- 执行费 -->
+        <div class="form-section" id="execution">
+            <div class="form-group">
+                <label>执行标的金额（元） *</label>
+                <input type="number" id="exec-amount" placeholder="请输入执行标的金额">
+            </div>
+            <button class="btn-submit" onclick="calculateExecution()">计算执行费</button>
+            <div class="result" id="execution-result">
+                <div class="amount" id="exec-total">¥0</div>
+            </div>
+        </div>
+        
+        <div class="disclaimer">⚠️ 仅供参考，实际费用以法院收费为准</div>
+    </div>
+    
+    <footer class="footer"><p>© 2026 法律知识库</p></footer>
+    
+    <script>
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+        
+        function calculateProperty() {
+            const amount = parseFloat(document.getElementById('property-amount').value) || 0;
+            let fee = 0;
+            if (amount <= 10000) fee = amount * 0.025 - 50;
+            else if (amount <= 20000) fee = amount * 0.02 + 300;
+            else if (amount <= 50000) fee = amount * 0.015 + 1300;
+            else if (amount <= 100000) fee = amount * 0.01 + 3800;
+            else if (amount <= 200000) fee = amount * 0.009 + 4800;
+            else if (amount <= 500000) fee = amount * 0.008 + 6800;
+            else if (amount <= 1000000) fee = amount * 0.006 + 16800;
+            else fee = amount * 0.005 + 26800;
+            
+            fee = Math.max(10, fee);
+            document.getElementById('property-fee').textContent = fee.toFixed(2);
+            document.getElementById('property-total').textContent = '¥' + fee.toFixed(2);
+            document.getElementById('property-result').classList.add('show');
+        }
+        
+        function calculateDivorce() {
+            const hasProperty = document.getElementById('divorce-property').value === 'yes';
+            const amount = parseFloat(document.getElementById('divorce-amount').value) || 0;
+            let fee = hasProperty ? Math.min(500, amount * 0.01) : 50;
+            document.getElementById('divorce-total').textContent = '¥' + fee.toFixed(2);
+            document.getElementById('divorce-result').classList.add('show');
+        }
+        
+        function calculateLabor() {
+            const amount = parseFloat(document.getElementById('labor-amount').value) || 0;
+            let fee = 10;
+            if (amount > 0) fee = Math.min(50, amount * 0.01);
+            document.getElementById('labor-total').textContent = '¥' + fee.toFixed(2);
+            document.getElementById('labor-result').classList.add('show');
+        }
+        
+        function calculateExecution() {
+            const amount = parseFloat(document.getElementById('exec-amount').value) || 0;
+            let fee = 0;
+            if (amount <= 10000) fee = 50;
+            else if (amount <= 500000) fee = amount * 0.015 - 100;
+            else fee = amount * 0.01 + 2400;
+            document.getElementById('exec-total').textContent = '¥' + fee.toFixed(2);
+            document.getElementById('execution-result').classList.add('show');
+        }
+    </script>
+</body>
+</html>
