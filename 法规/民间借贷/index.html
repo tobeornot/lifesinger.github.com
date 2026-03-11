@@ -4,27 +4,141 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>法规解读 - 法律知识库</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Noto Sans SC', sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
-        h1 { color: #1a73e8; }
-        .back { display: inline-block; margin-bottom: 20px; color: #666; text-decoration: none; }
-        .card { background: #f8f9fa; padding: 15px; margin: 10px 0; border-radius: 8px; }
+        :root { --primary: #1a73e8; --dark: #1f1f1f; --gray: #666; --light: #f8f9fa; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans SC', sans-serif; background: var(--light); color: var(--dark); line-height: 1.8; }
+        .header { background: linear-gradient(135deg, #1a73e8 0%, #667eea 100%); color: white; padding: 40px 20px; text-align: center; }
+        .header a { color: white; text-decoration: none; }
+        .container { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+        .back { display: inline-block; margin-bottom: 20px; color: var(--primary); text-decoration: none; }
+        .section { background: white; padding: 25px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .section h2 { color: var(--primary); margin-bottom: 15px; font-size: 1.4rem; }
+        .law-item { border-left: 3px solid var(--primary); padding-left: 15px; margin: 20px 0; }
+        .law-title { font-weight: 600; color: var(--dark); margin-bottom: 8px; }
+        .law-content { color: var(--gray); font-size: 0.95rem; }
+        .highlight { background: #fff3e0; padding: 15px; border-radius: 8px; margin: 15px 0; }
     </style>
 </head>
 <body>
-    <a href="../../index.html" class="back">← 返回首页</a>
-    <h1>📜 法规解读</h1>
-    <div class="card">
-        <h3>民事诉讼法（执行篇）</h3>
-        <p>民事诉讼法执行程序详细解读...</p>
-    </div>
-    <div class="card">
-        <h3>最高院执行司法解释</h3>
-        <p>最高人民法院执行司法解释汇编...</p>
-    </div>
-    <div class="card">
-        <h3>地方执行细则</h3>
-        <p>各地法院执行工作细则...</p>
+    <header class="header">
+        <a href="../../index.html">← 返回首页</a>
+        <h1>📜 法规解读</h1>
+        <p>最新法律法规详细解读</p>
+    </header>
+    
+    <div class="container">
+        <a href="../../index.html" class="back">← 返回首页</a>
+        
+        <div class="section">
+            <h2>📖 民间借贷相关规定</h2>
+            
+            <div class="law-item">
+                <div class="law-title">《民法典》第六百八十条 - 借款合同利率</div>
+                <div class="law-content">
+                    禁止高利放贷，借款的利率不得违反国家有关规定。
+                    <br>借款合同对支付利息没有约定的，视为没有利息。
+                    <br>借款合同对支付利息约定不明确，当事人不能达成补充协议的，按照当地或者当事人的交易方式、交易习惯、市场利率等因素确定利息。
+                </div>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">《民间借贷司法解释》第十四条 - 合同无效情形</div>
+                <div class="law-content">
+                    具有下列情形之一的，人民法院应当认定民间借贷合同无效：
+                    <br>（一）套取金融机构贷款转贷的；
+                    <br>（二）以向其他营利法人借贷、向本单位职工集资，或者以向公众非法吸收存款等方式取得的资金转贷的；
+                    <br>（三）未依法取得放贷资格的出借人，以营利为目的向社会不特定对象提供借款的；
+                    <br>（四）出借人事先知道或者应当知道借款人借款用于违法犯罪活动仍然提供借款的；
+                    <br>（五）违反法律、行政法规强制性规定的；
+                    <br>（六）违背公序良俗的。
+                </div>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">《民间借贷司法解释》第二十五条 - 利率上限</div>
+                <div class="highlight">
+                    <strong>出借人请求借款人按照合同约定利率支付利息的，人民法院应予支持，但是双方约定的利率超过合同成立时一年期贷款市场报价利率四倍的除外。</strong>
+                    <br><br>
+                    2024年LPR为3.45%，四倍即为13.8%
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📖 劳动合同相关规定</h2>
+            
+            <div class="law-item">
+                <div class="law-title">《劳动合同法》第十条 - 书面劳动合同</div>
+                <div class="law-content">
+                    建立劳动关系，应当订立书面劳动合同。
+                    <br>已建立劳动关系，未同时订立书面劳动合同的，应当自用工之日起一个月内订立书面劳动合同。
+                </div>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">《劳动合同法》第八十二条 - 双倍工资</div>
+                <div class="highlight">
+                    <strong>用人单位自用工之日起超过一个月不满一年未与劳动者订立书面劳动合同的，应当向劳动者每月支付二倍的工资。</strong>
+                </div>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">《劳动合同法》第四十六条 - 经济补偿</div>
+                <div class="law-content">
+                    有下列情形之一的，用人单位应当向劳动者支付经济补偿：
+                    <br>（一）劳动者依照本法第三十八条规定解除劳动合同的；
+                    <br>（二）用人单位依照本法第三十六条规定向劳动者提出解除劳动合同并与劳动者协商一致解除劳动合同的；
+                    <br>（三）用人单位依照本法第四十条规定解除劳动合同的；
+                    <br>（四）依照本法第四十一条第一款规定解除劳动合同的；
+                    <br>（五）劳动合同期满的；
+                    <br>（六）用人单位被依法宣告破产或被吊销营业执照等情形下终止劳动合同的。
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📖 民法典侵权责任编</h2>
+            
+            <div class="law-item">
+                <div class="law-title">《民法典》第一千一百七十九条 - 人身损害赔偿</div>
+                <div class="law-content">
+                    侵害他人造成人身损害的，应当赔偿医疗费、护理费、交通费、营养费、住院伙食补助费等为治疗和康复支出的合理费用，以及因误工减少的收入。
+                    <br>造成残疾的，还应当赔偿辅助器具费和残疾赔偿金。
+                    <br>造成死亡的，还应当赔偿丧葬费和死亡赔偿金。
+                </div>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">《民法典》第一千一百八十四条 - 财产损害赔偿</div>
+                <div class="highlight">
+                    <strong>侵害他人财产的，财产损失按照损失发生时的市场价格或者其他合理方式计算。</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📖 诉讼时效规定</h2>
+            
+            <div class="law-item">
+                <div class="law-title">《民法典》第一百八十八条 - 普通诉讼时效</div>
+                <div class="highlight">
+                    <strong>向人民法院请求保护民事权利的诉讼时效期间为三年。法律另有规定的，依照其规定。</strong>
+                </div>
+            </div>
+            
+            <div class="law-item">
+                <div class="law-title">《民法典》第一百九十五条 - 诉讼时效中断</div>
+                <div class="law-content">
+                    有下列情形之一的，诉讼时效中断，从中断、有关程序终结时起，诉讼时效期间重新计算：
+                    <br>（一）权利人向义务人提出履行请求；
+                    <br>（二）义务人同意履行义务；
+                    <br>（三）权利人提起诉讼或者申请仲裁；
+                    <br>（四）与提起诉讼或者申请仲裁具有同等效力的其他情形。
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
