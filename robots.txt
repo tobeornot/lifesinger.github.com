@@ -1,6 +1,3 @@
-# Robots.txt for wzm1992.top
 User-agent: *
 Allow: /
-
-# Sitemap
 Sitemap: https://wzm1992.top/sitemap.xml
