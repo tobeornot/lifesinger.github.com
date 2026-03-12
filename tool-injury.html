@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>伤残等级计算器 - 法律知识库</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #1a73e8; --primary-dark: #1557b0; --success: #34a853; --light: #f8f9fa; --dark: #1f1f1f; --gray: #6c757d; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans SC', sans-serif; background: var(--light); color: var(--dark); }
+        
+        .nav { background: white; padding: 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .nav-content { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; height: 50px; }
+        .nav-logo { font-weight: 700; font-size: 1.1rem; color: var(--primary); text-decoration: none; }
+        .nav-links { display: flex; gap: 8px; list-style: none; }
+        .nav-links a { color: var(--dark); text-decoration: none; font-size: 0.9rem; padding: 6px 10px; border-radius: 6px; }
+        .nav-links a:hover { background: rgba(26,115,232,0.1); }
+        
+        .header { background: linear-gradient(135deg, #1a73e8 0%, #667eea 100%); color: white; padding: 30px 20px; text-align: center; }
+        .header a { color: white; text-decoration: none; }
+        
+        .container { max-width: 800px; margin: 0 auto; padding: 30px 20px; }
+        
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab { flex: 1; padding: 10px; background: white; border: 2px solid #e0e0e0; border-radius: 8px; text-align: center; cursor: pointer; font-weight: 500; }
+        .tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        
+        .card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .card h3 { color: var(--primary); margin-bottom: 20px; font-size: 1.1rem; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; }
+        .form-group select, .form-group input { width: 100%; padding: 10px 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 0.95rem; }
+        .form-group select:focus, .form-group input:focus { outline: none; border-color: var(--primary); }
+        
+        .btn { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
+        .btn:hover { background: var(--primary-dark); }
+        
+        .result { display: none; margin-top: 20px; padding: 20px; background: #e8f5e9; border-radius: 10px; }
+        .result.show { display: block; }
+        .result-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .result-row:last-child { border-bottom: none; }
+        .result-value { font-weight: 600; color: var(--primary); }
+        
+        .level-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .level-table th, .level-table td { padding: 10px; text-align: left; border-bottom: 1px solid #eee; font-size: 0.85rem; }
+        .level-table th { background: #f5f5f5; font-weight: 600; }
+        .level-table tr:hover { background: #fafafa; }
+        
+        .info { margin-top: 20px; padding: 15px; background: #fff3e0; border-radius: 8px; font-size: 0.85rem; }
+        
+        @media (max-width: 768px) {
+            .nav-content { padding: 0 10px; overflow-x: auto; }
+            .nav-links { gap: 5px; }
+            .nav-links a { padding: 5px 8px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="index.html" class="nav-logo">⚖️</a>
+            <ul class="nav-links">
+                <li><a href="tool-compensation.html">赔偿</a></li>
+                <li><a href="tool-interest.html">利息</a></li>
+                <li><a href="tool-date.html">时效</a></li>
+                <li><a href="tool-court.html">法院</a></li>
+                <li><a href="tool-contract.html">合同</a></li>
+                <li><a href="tool-fee.html">诉讼费</a></li>
+                <li><a href="tool-lawyer.html">律师费</a></li>
+                <li><a href="tool-penalty.html">违约金</a></li>
+                <li><a href="tool-injury.html" style="color:var(--primary);font-weight:600;">伤残</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <header class="header">
+        <a href="index.html">← 返回首页</a>
+        <h1>🏥 伤残等级计算器</h1>
+        <p>工伤/交通事故伤残等级参考</p>
+    </header>
+    
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('work')">工伤伤残</div>
+            <div class="tab" onclick="switchTab('traffic')">交通事故</div>
+        </div>
+        
+        <!-- 工伤伤残 -->
+        <div id="work-panel">
+            <div class="card">
+                <h3>🏭 工伤伤残等级计算</h3>
+                <div class="form-group">
+                    <label>伤残类型</label>
+                    <select id="work-type">
+                        <option value="1">一级（最严重）</option>
+                        <option value="2">二级</option>
+                        <option value="3">三级</option>
+                        <option value="4">四级</option>
+                        <option value="5">五级</option>
+                        <option value="6">六级</option>
+                        <option value="7">七级</option>
+                        <option value="8">八级</option>
+                        <option value="9">九级</option>
+                        <option value="10">十级（最轻）</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>本人月工资（元）</label>
+                    <input type="number" id="work-wage" placeholder="如：5000">
+                </div>
+                <div class="form-group">
+                    <label>伤残津贴（一次性）</label>
+                    <select id="work一次性">
+                        <option value="yes">需要一次性伤残补助金</option>
+                        <option value="no">按月领取伤残津贴</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="calculateWork()">计算赔偿</button>
+                
+                <div class="result" id="work-result">
+                    <div class="result-row"><span>伤残等级</span><span class="result-value" id="w-level">-</span></div>
+                    <div class="result-row"><span>一次性伤残补助金</span><span class="result-value" id="w-subsidy">¥0</span></div>
+                    <div class="result-row"><span>伤残津贴（月）</span><span class="result-value" id="w-monthly">¥0</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 交通事故伤残 -->
+        <div id="traffic-panel" style="display:none;">
+            <div class="card">
+                <h3>🚗 交通事故伤残等级计算</h3>
+                <div class="form-group">
+                    <label>伤残等级</label>
+                    <select id="traffic-level">
+                        <option value="1">一级</option>
+                        <option value="2">二级</option>
+                        <option value="3">三级</option>
+                        <option value="4">四级</option>
+                        <option value="5">五级</option>
+                        <option value="6">六级</option>
+                        <option value="7">七级</option>
+                        <option value="8">八级</option>
+                        <option value="9">九级</option>
+                        <option value="10">十级</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>当地人均可支配收入（元/年）</label>
+                    <input type="number" id="traffic-income" placeholder="如：50000">
+                </div>
+                <div class="form-group">
+                    <label>被扶养人生活费</label>
+                    <select id="traffic-depend">
+                        <option value="no">无被扶养人</option>
+                        <option value="yes">有被扶养人</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="calculateTraffic()">计算赔偿</button>
+                
+                <div class="result" id="traffic-result">
+                    <div class="result-row"><span>伤残赔偿金</span><span class="result-value" id="t-compensation">¥0</span></div>
+                    <div class="result-row"><span>精神损害抚慰金</span><span class="result-value" id="t-spirit">¥0</span></div>
+                    <div class="result-row"><span>合计</span><span class="result-value" id="t-total">¥0</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3>📋 伤残等级速查表</h3>
+            <table class="level-table">
+                <tr><th>等级</th><th>工伤标准</th><th>赔偿月数</th></tr>
+                <tr><td>一级</td><td>生活完全不能自理</td><td>27个月</td></tr>
+                <tr><td>二级</td><td>生活大部分不能自理</td><td>25个月</td></tr>
+                <tr><td>三级</td><td>生活部分不能自理</td><td>23个月</td></tr>
+                <tr><td>四级</td><td>生活大部分自理</td><td>21个月</td></tr>
+                <tr><td>五级</td><td>保留劳动关系</td><td>18个月</td></tr>
+                <tr><td>六级</td><td>保留劳动关系</td><td>16个月</td></tr>
+                <tr><td>七级</td><td>劳动合同终止</td><td>13个月</td></tr>
+                <tr><td>八级</td><td>劳动合同终止</td><td>11个月</td></tr>
+                <tr><td>九级</td><td>劳动合同终止</td><td>9个月</td></tr>
+                <tr><td>十级</td><td>劳动合同终止</td><td>7个月</td></tr>
+            </table>
+        </div>
+        
+        <div class="info">
+            <strong>💡 提示：</strong>
+            <ul style="margin-top:8px;padding-left:20px;">
+                <li>伤残等级需由劳动能力鉴定委员会鉴定</li>
+                <li>交通事故需由交警部门委托司法鉴定机构</li>
+                <li>实际赔偿以当地社保部门和法院判决为准</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+    function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        event.target.classList.add('active');
+        document.getElementById('work-panel').style.display = tab === 'work' ? 'block' : 'none';
+        document.getElementById('traffic-panel').style.display = tab === 'traffic' ? 'block' : 'none';
+    }
+    
+    function calculateWork() {
+        const level = parseInt(document.getElementById('work-type').value);
+        const wage = parseFloat(document.getElementById('work-wage').value) || 0;
+        
+        // 一次性伤残补助金月数
+        const months = [27, 25, 23, 21, 18, 16, 13, 11, 9, 7][level - 1];
+        const subsidy = wage * months;
+        
+        // 伤残津贴比例
+        const rates = [0.90, 0.85, 0.80, 0.75, 0.70, 0.65, 0.60, 0.55, 0.50, 0.45];
+        const monthly = wage * rates[level - 1];
+        
+        document.getElementById('w-level').textContent = level + '级';
+        document.getElementById('w-subsidy').textContent = '¥' + Math.round(subsidy).toLocaleString();
+        document.getElementById('w-monthly').textContent = '¥' + Math.round(monthly).toLocaleString();
+        document.getElementById('work-result').classList.add('show');
+    }
+    
+    function calculateTraffic() {
+        const level = parseInt(document.getElementById('traffic-level').value);
+        const income = parseFloat(document.getElementById('traffic-income').value) || 50000;
+        
+        // 伤残赔偿金 = 人均收入 × 年龄系数
+        const ageFactor = Math.max(0, 20 - level);
+        const compensation = income * ageFactor;
+        
+        // 精神损害抚慰金
+        const spirit = level <= 4 ? 50000 : level <= 7 ? 30000 : level <= 10 ? 10000 : 5000;
+        
+        const total = compensation + spirit;
+        
+        document.getElementById('t-compensation').textContent = '¥' + Math.round(compensation).toLocaleString();
+        document.getElementById('t-spirit').textContent = '¥' + spirit.toLocaleString();
+        document.getElementById('t-total').textContent = '¥' + Math.round(total).toLocaleString();
+        document.getElementById('traffic-result').classList.add('show');
+    }
+    </script>
+</body>
+</html>
