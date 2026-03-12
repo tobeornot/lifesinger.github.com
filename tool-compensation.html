@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>赔偿金额计算 - 法律知识库</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #1557b0;
+            --success: #34a853;
+            --warning: #fbbc04;
+            --danger: #ea4335;
+            --light: #f8f9fa;
+            --dark: #1f1f1f;
+            --gray: #6c757d;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a73e8 0%, #667eea 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* Form */
+        .form-section {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .form-group .hint {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+        
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn-submit:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Result */
+        .result {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-radius: 12px;
+            border-left: 5px solid var(--success);
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result h3 {
+            color: var(--success);
+            margin-bottom: 15px;
+        }
+        
+        .result .amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+        
+        .result .detail {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .result .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+        
+        .disclaimer {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff3e0;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #e65100;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航 -->
+    <nav style="background: white; padding: 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; height: 60px;">
+            <a href="index.html" style="font-weight: 700; font-size: 1.2rem; color: #1a73e8; text-decoration: none; display: flex; align-items: center; gap: 8px;">⚖️ Legal Hub</a>
+            <ul style="display: flex; gap: 5px; list-style: none; align-items: center;" id="navLinks">
+                <li><a href="index.html" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: block;">首页</a></li>
+                <li style="position: relative;">
+                    <a href="javascript:void(0)" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 4px;">实用工具 ▾</a>
+                    <div style="display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-radius: 12px; overflow: hidden; padding: 8px 0;" class="dropdown-content">
+                        <a href="tool-compensation.html" style="padding: 10px 20px; display: block; color: #1a73e8; background: rgba(26,115,232,0.1);">💰 赔偿金额计算</a>
+                        <a href="tool-contract.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">📝 智能合同生成</a>
+                        <a href="tool-fee.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">⚖️ 诉讼费计算</a>
+                        <a href="tool-law-search.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">🔍 法规查询</a>
+                    </div>
+                </li>
+                <li style="position: relative;">
+                    <a href="javascript:void(0)" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 4px;">法规 ▾</a>
+                    <div style="display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-radius: 12px; overflow: hidden; padding: 8px 0;" class="dropdown-content">
+                        <a href="法规/民间借贷/index.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">📋 民间借贷</a>
+                    </div>
+                </li>
+                <li style="position: relative;">
+                    <a href="javascript:void(0)" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 4px;">案例 ▾</a>
+                    <div style="display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-radius: 12px; overflow: hidden; padding: 8px 0;" class="dropdown-content">
+                        <a href="案例/民间借贷/index.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">⚖️ 民间借贷</a>
+                    </div>
+                </li>
+                <li style="position: relative;">
+                    <a href="javascript:void(0)" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 4px;">实践 ▾</a>
+                    <div style="display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-radius: 12px; overflow: hidden; padding: 8px 0;" class="dropdown-content">
+                        <a href="实践/执行流程指南/index.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">📖 执行流程指南</a>
+                    </div>
+                </li>
+                <li style="position: relative;">
+                    <a href="javascript:void(0)" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 4px;">模板 ▾</a>
+                    <div style="display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-radius: 12px; overflow: hidden; padding: 8px 0;" class="dropdown-content">
+                        <a href="模板/执行申请书/index.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">📄 执行申请书</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <script>
+        document.querySelectorAll('.nav-dropdown').forEach(function(dropdown) {
+            dropdown.addEventListener('mouseenter', function() {
+                this.querySelector('.dropdown-content').style.display = 'block';
+            });
+            dropdown.addEventListener('mouseleave', function() {
+                this.querySelector('.dropdown-content').style.display = 'none';
+            });
+        });
+    </script>
+    
+    <header class="header">
+        <a href="index.html">← 返回首页</a>
+        <h1>💰 赔偿金额计算工具</h1>
+        <p>工伤/交通事故/人身损害/劳动纠纷</p>
+    </header>
+    
+    <div class="container">
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" data-tab="traffic">交通事故</div>
+            <div class="tab" data-tab="work">工伤赔偿</div>
+            <div class="tab" data-tab="personal">人身损害</div>
+            <div class="tab" data-tab="labor">劳动纠纷</div>
+        </div>
+        
+        <!-- Traffic Accident Form -->
+        <div class="form-section active" id="traffic">
+            <div class="form-group">
+                <label>受害人月工资（元） *</label>
+                <input type="number" id="traffic-wage" placeholder="请输入月工资">
+            </div>
+            <div class="form-group">
+                <label>误工天数</label>
+                <input type="number" id="traffic-days" placeholder="请输入误工天数">
+                <div class="hint">一般按医疗机构证明确定</div>
+            </div>
+            <div class="form-group">
+                <label>医疗费用（元）</label>
+                <input type="number" id="traffic-medical" placeholder="请输入医疗费用">
+            </div>
+            <div class="form-group">
+                <label>护理天数</label>
+                <input type="number" id="traffic-nursing" placeholder="请输入护理天数">
+            </div>
+            <div class="form-group">
+                <label>伤残等级</label>
+                <select id="traffic-level">
+                    <option value="0">无伤残</option>
+                    <option value="0.1">10级 (10%)</option>
+                    <option value="0.2">9级 (20%)</option>
+                    <option value="0.3">8级 (30%)</option>
+                    <option value="0.4">7级 (40%)</option>
+                    <option value="0.5">6级 (50%)</option>
+                    <option value="0.6">5级 (60%)</option>
+                    <option value="0.7">4级 (70%)</option>
+                    <option value="0.8">3级 (80%)</option>
+                    <option value="0.9">2级 (90%)</option>
+                    <option value="1.0">1级 (100%)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>营养费用（元）</label>
+                <input type="number" id="traffic-nutrition" placeholder="请输入营养费用">
+            </div>
+            <div class="form-group">
+                <label>其他费用（元）</label>
+                <input type="number" id="traffic-other" placeholder="请输入其他费用" value="0">
+            </div>
+            <button class="btn-submit" onclick="calculateTraffic()">计算赔偿金额</button>
+            
+            <div class="result" id="traffic-result">
+                <h3>💰 赔偿金额</h3>
+                <div class="amount" id="traffic-total">¥0</div>
+                <div class="detail">
+                    <div class="detail-item"><span>误工费</span><span id="traffic-wage-total">¥0</span></div>
+                    <div class="detail-item"><span>医疗费</span><span id="traffic-medical-total">¥0</span></div>
+                    <div class="detail-item"><span>护理费</span><span id="traffic-nursing-total">¥0</span></div>
+                    <div class="detail-item"><span>营养费</span><span id="traffic-nutrition-total">¥0</span></div>
+                    <div class="detail-item"><span>伤残赔偿</span><span id="traffic-disability-total">¥0</span></div>
+                    <div class="detail-item"><span>其他</span><span id="traffic-other-total">¥0</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Work Injury Form -->
+        <div class="form-section" id="work">
+            <div class="form-group">
+                <label>本人月平均工资（元） *</label>
+                <input type="number" id="work-wage" placeholder="请输入月平均工资">
+            </div>
+            <div class="form-group">
+                <label>停工留薪期（月）</label>
+                <input type="number" id="work-leave" placeholder="请输入月数">
+            </div>
+            <div class="form-group">
+                <label>工伤医疗费用（元）</label>
+                <input type="number" id="work-medical" placeholder="请输入医疗费用">
+            </div>
+            <div class="form-group">
+                <label>工伤伤残等级</label>
+                <select id="work-level">
+                    <option value="0">无伤残</option>
+                    <option value="1">10级</option>
+                    <option value="2">9级</option>
+                    <option value="3">8级</option>
+                    <option value="4">7级</option>
+                    <option value="5">6级</option>
+                    <option value="6">5级</option>
+                    <option value="7">4级</option>
+                    <option value="8">3级</option>
+                    <option value="9">2级</option>
+                    <option value="10">1级</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>住院天数</label>
+                <input type="number" id="work-hospital" placeholder="请输入住院天数">
+            </div>
+            <div class="form-group">
+                <label>一次性就业补助金（元）</label>
+                <input type="number" id="work-subsidy" placeholder="请输入金额" value="0">
+            </div>
+            <button class="btn-submit" onclick="calculateWork()">计算赔偿金额</button>
+            
+            <div class="result" id="work-result">
+                <h3>💰 工伤赔偿金额</h3>
+                <div class="amount" id="work-total">¥0</div>
+            </div>
+        </div>
+        
+        <!-- Personal Injury Form -->
+        <div class="form-section" id="personal">
+            <div class="form-group">
+                <label>受害人日工资（元） *</label>
+                <input type="number" id="personal-wage" placeholder="请输入日工资">
+            </div>
+            <div class="form-group">
+                <label>误工天数</label>
+                <input type="number" id="personal-days" placeholder="请输入误工天数">
+            </div>
+            <div class="form-group">
+                <label>实际医疗费用（元）</label>
+                <input type="number" id="personal-medical" placeholder="请输入医疗费用">
+            </div>
+            <div class="form-group">
+                <label>护理人员日工资（元）</label>
+                <input type="number" id="personal-nurse-wage" placeholder="请输入护理人员日工资">
+            </div>
+            <div class="form-group">
+                <label>护理天数</label>
+                <input type="number" id="personal-nursing" placeholder="请输入护理天数">
+            </div>
+            <div class="form-group">
+                <label>伤残等级系数</label>
+                <input type="number" id="personal-level" placeholder="如：0.1 表示10%" step="0.01" max="1">
+            </div>
+            <button class="btn-submit" onclick="calculatePersonal()">计算赔偿金额</button>
+            
+            <div class="result" id="personal-result">
+                <h3>💰 人身损害赔偿</h3>
+                <div class="amount" id="personal-total">¥0</div>
+            </div>
+        </div>
+        
+        <!-- Labor Dispute Form -->
+        <div class="form-section" id="labor">
+            <div class="form-group">
+                <label>月工资（元） *</label>
+                <input type="number" id="labor-wage" placeholder="请输入月工资">
+            </div>
+            <div class="form-group">
+                <label>工作年限（年）</label>
+                <input type="number" id="labor-years" placeholder="请输入工作年限">
+            </div>
+            <div class="form-group">
+                <label>未签合同月份</label>
+                <input type="number" id="labor-nocontract" placeholder="请输入月份">
+            </div>
+            <div class="form-group">
+                <label>拖欠工资（元）</label>
+                <input type="number" id="labor- arrears" placeholder="请输入金额">
+            </div>
+            <div class="form-group">
+                <label>是否违法解除</label>
+                <select id="labor-illegal">
+                    <option value="no">否</option>
+                    <option value="yes">是</option>
+                </select>
+            </div>
+            <button class="btn-submit" onclick="calculateLabor()">计算赔偿金额</button>
+            
+            <div class="result" id="labor-result">
+                <h3>💰 劳动纠纷赔偿</h3>
+                <div class="amount" id="labor-total">¥0</div>
+            </div>
+        </div>
+        
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            ⚠️ <strong>免责声明：</strong>本计算结果依据2024年全国通用赔偿基数（城镇居民人均可支配收入49283元/年）计算，实际赔偿以法院判决/劳动仲裁/双方协商为准，相关费用需提供合法票据。
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>© 2026 法律知识库 | Wayne's Legal Hub</p>
+    </footer>
+    
+    <script>
+        // Tab switching
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                document.querySelectorAll('.form-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+        
+        // 2024年赔偿基数
+        const BASE_INCOME = 49283; // 城镇居民人均可支配收入
+        
+        // Traffic Accident Calculation
+        function calculateTraffic() {
+            const wage = parseFloat(document.getElementById('traffic-wage').value) || 0;
+            const days = parseFloat(document.getElementById('traffic-days').value) || 0;
+            const medical = parseFloat(document.getElementById('traffic-medical').value) || 0;
+            const nursing = parseFloat(document.getElementById('traffic-nursing').value) || 0;
+            const level = parseFloat(document.getElementById('traffic-level').value) || 0;
+            const nutrition = parseFloat(document.getElementById('traffic-nutrition').value) || 0;
+            const other = parseFloat(document.getElementById('traffic-other').value) || 0;
+            
+            const wageTotal = wage * days;
+            const nursingTotal = nursing * 100; // 假设护理费100元/天
+            const disabilityTotal = BASE_INCOME * 20 * level;
+            
+            const total = wageTotal + medical + nursingTotal + nutrition + disabilityTotal + other;
+            
+            document.getElementById('traffic-wage-total').textContent = '¥' + wageTotal.toLocaleString();
+            document.getElementById('traffic-medical-total').textContent = '¥' + medical.toLocaleString();
+            document.getElementById('traffic-nursing-total').textContent = '¥' + nursingTotal.toLocaleString();
+            document.getElementById('traffic-nutrition-total').textContent = '¥' + nutrition.toLocaleString();
+            document.getElementById('traffic-disability-total').textContent = '¥' + disabilityTotal.toLocaleString();
+            document.getElementById('traffic-other-total').textContent = '¥' + other.toLocaleString();
+            document.getElementById('traffic-total').textContent = '¥' + total.toLocaleString();
+            
+            document.getElementById('traffic-result').classList.add('show');
+        }
+        
+        // Work Injury Calculation
+        function calculateWork() {
+            const wage = parseFloat(document.getElementById('work-wage').value) || 0;
+            const leave = parseFloat(document.getElementById('work-leave').value) || 0;
+            const medical = parseFloat(document.getElementById('work-medical').value) || 0;
+            const level = parseInt(document.getElementById('work-level').value) || 0;
+            const hospital = parseFloat(document.getElementById('work-hospital').value) || 0;
+            const subsidy = parseFloat(document.getElementById('work-subsidy').value) || 0;
+            
+            const wageTotal = wage * leave;
+            const hospitalTotal = hospital * 50; // 住院伙食补助
+            const disabilityLevels = [0, 7, 9, 11, 13, 16, 19, 23, 27, 32, 27];
+            const disabilityTotal = wage * disabilityLevels[level];
+            
+            const total = wageTotal + medical + hospitalTotal + disabilityTotal + subsidy;
+            
+            document.getElementById('work-total').textContent = '¥' + total.toLocaleString();
+            document.getElementById('work-result').classList.add('show');
+        }
+        
+        // Personal Injury Calculation
+        function calculatePersonal() {
+            const wage = parseFloat(document.getElementById('personal-wage').value) || 0;
+            const days = parseFloat(document.getElementById('personal-days').value) || 0;
+            const medical = parseFloat(document.getElementById('personal-medical').value) || 0;
+            const nurseWage = parseFloat(document.getElementById('personal-nurse-wage').value) || 0;
+            const nursing = parseFloat(document.getElementById('personal-nursing').value) || 0;
+            const level = parseFloat(document.getElementById('personal-level').value) || 0;
+            
+            const wageTotal = wage * days;
+            const nursingTotal = nurseWage * nursing;
+            const disabilityTotal = BASE_INCOME * 20 * level;
+            
+            const total = wageTotal + medical + nursingTotal + disabilityTotal;
+            
+            document.getElementById('personal-total').textContent = '¥' + total.toLocaleString();
+            document.getElementById('personal-result').classList.add('show');
+        }
+        
+        // Labor Dispute Calculation
+        function calculateLabor() {
+            const wage = parseFloat(document.getElementById('labor-wage').value) || 0;
+            const years = parseFloat(document.getElementById('labor-years').value) || 0;
+            const noContract = parseFloat(document.getElementById('labor-nocontract').value) || 0;
+            const arrears = parseFloat(document.getElementById('labor-arrears').value) || 0;
+            const illegal = document.getElementById('labor-illegal').value === 'yes';
+            
+            const doubleWage = wage * Math.min(years, 12); // 双倍工资（最高12个月）
+            const severance = wage * years; // 经济补偿金
+            const illegalBonus = illegal ? wage * 2 : 0; // 违法解除赔偿金
+            
+            const total = doubleWage + severance + arrears + illegalBonus;
+            
+            document.getElementById('labor-total').textContent = '¥' + total.toLocaleString();
+            document.getElementById('labor-result').classList.add('show');
+        }
+    </script>
+</body>
+</html>

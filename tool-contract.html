@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能合同生成 - 法律知识库</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #1a73e8; --primary-dark: #1557b0; --light: #f8f9fa; --dark: #1f1f1f; --gray: #6c757d; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans SC', sans-serif; background: var(--light); color: var(--dark); line-height: 1.6; }
+        
+        .header { background: linear-gradient(135deg, #1a73e8 0%, #667eea 100%); color: white; padding: 30px 20px; text-align: center; }
+        .header a { color: white; text-decoration: none; }
+        
+        .container { max-width: 800px; margin: 0 auto; padding: 30px 20px; }
+        
+        .tabs { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+        .tab { padding: 12px 20px; background: white; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.3s; }
+        .tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        
+        .form-section { display: none; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .form-section.active { display: block; }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; font-family: inherit; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); }
+        .form-group textarea { min-height: 120px; resize: vertical; }
+        
+        .btn-submit { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: background 0.3s; }
+        .btn-submit:hover { background: var(--primary-dark); }
+        
+        .result { display: none; margin-top: 30px; padding: 25px; background: #e8f5e9; border-radius: 12px; }
+        .result.show { display: block; }
+        .result h3 { color: #2e7d32; margin-bottom: 15px; }
+        .result pre { background: white; padding: 15px; border-radius: 8px; overflow-x: auto; font-size: 0.9rem; white-space: pre-wrap; }
+        
+        .disclaimer { margin-top: 20px; padding: 15px; background: #fff3e0; border-radius: 8px; font-size: 0.85rem; color: #e65100; }
+        
+        .footer { text-align: center; padding: 20px; color: var(--gray); font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <!-- 导航 -->
+    <nav style="background: white; padding: 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; height: 60px;">
+            <a href="index.html" style="font-weight: 700; font-size: 1.2rem; color: #1a73e8; text-decoration: none; display: flex; align-items: center; gap: 8px;">⚖️ Legal Hub</a>
+            <ul style="display: flex; gap: 5px; list-style: none; align-items: center;">
+                <li><a href="index.html" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: block;">首页</a></li>
+                <li style="position: relative;">
+                    <a href="javascript:void(0)" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 4px;">实用工具 ▾</a>
+                    <div style="display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-radius: 12px; overflow: hidden; padding: 8px 0;" class="dropdown-content">
+                        <a href="tool-compensation.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">💰 赔偿金额计算</a>
+                        <a href="tool-contract.html" style="padding: 10px 20px; display: block; color: #1a73e8; background: rgba(26,115,232,0.1);">📝 智能合同生成</a>
+                        <a href="tool-fee.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">⚖️ 诉讼费计算</a>
+                        <a href="tool-law-search.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">🔍 法规查询</a>
+                    </div>
+                </li>
+                <li style="position: relative;">
+                    <a href="javascript:void(0)" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 4px;">法规 ▾</a>
+                    <div style="display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-radius: 12px; overflow: hidden; padding: 8px 0;" class="dropdown-content">
+                        <a href="法规/民间借贷/index.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">📋 民间借贷</a>
+                    </div>
+                </li>
+                <li style="position: relative;">
+                    <a href="javascript:void(0)" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 4px;">案例 ▾</a>
+                    <div style="display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-radius: 12px; overflow: hidden; padding: 8px 0;" class="dropdown-content">
+                        <a href="案例/民间借贷/index.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">⚖️ 民间借贷</a>
+                    </div>
+                </li>
+                <li style="position: relative;">
+                    <a href="javascript:void(0)" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 4px;">实践 ▾</a>
+                    <div style="display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-radius: 12px; overflow: hidden; padding: 8px 0;" class="dropdown-content">
+                        <a href="实践/执行流程指南/index.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">📖 执行流程指南</a>
+                    </div>
+                </li>
+                <li style="position: relative;">
+                    <a href="javascript:void(0)" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 4px;">模板 ▾</a>
+                    <div style="display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-radius: 12px; overflow: hidden; padding: 8px 0;" class="dropdown-content">
+                        <a href="模板/执行申请书/index.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">📄 执行申请书</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <script>
+        document.querySelectorAll('li').forEach(function(dropdown) {
+            if (dropdown.querySelector('.dropdown-content')) {
+                dropdown.addEventListener('mouseenter', function() {
+                    this.querySelector('.dropdown-content').style.display = 'block';
+                });
+                dropdown.addEventListener('mouseleave', function() {
+                    this.querySelector('.dropdown-content').style.display = 'none';
+                });
+            }
+        });
+    </script>
+    
+    <header class="header">
+        <a href="index.html">← 返回首页</a>
+        <h1>📝 智能合同生成工具</h1>
+        <p>自动生成租房/劳务/买卖/借款正规合同</p>
+    </header>
+    
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" data-tab="rental">租房合同</div>
+            <div class="tab" data-tab="labor">劳务合同</div>
+            <div class="tab" data-tab="sale">买卖合同</div>
+            <div class="tab" data-tab="loan">借款合同</div>
+        </div>
+        
+        <!-- 租房合同 -->
+        <div class="form-section active" id="rental">
+            <div class="form-group">
+                <label>甲方（出租人）姓名 *</label>
+                <input type="text" id="rental-landlord" placeholder="请输入甲方姓名">
+            </div>
+            <div class="form-group">
+                <label>乙方（承租人）姓名 *</label>
+                <input type="text" id="rental-tenant" placeholder="请输入乙方姓名">
+            </div>
+            <div class="form-group">
+                <label>身份证号码 *</label>
+                <input type="text" id="rental-idcard" placeholder="请输入乙方身份证号码">
+            </div>
+            <div class="form-group">
+                <label>联系电话 *</label>
+                <input type="text" id="rental-phone" placeholder="请输入联系电话">
+            </div>
+            <div class="form-group">
+                <label>房屋地址 *</label>
+                <input type="text" id="rental-address" placeholder="请输入房屋详细地址">
+            </div>
+            <div class="form-group">
+                <label>月租金（元） *</label>
+                <input type="number" id="rental-price" placeholder="请输入月租金">
+            </div>
+            <div class="form-group">
+                <label>租赁期限 *</label>
+                <input type="text" id="rental-period" placeholder="如：一年">
+            </div>
+            <div class="form-group">
+                <label>押金（元）</label>
+                <input type="number" id="rental-deposit" placeholder="请输入押金金额" value="0">
+            </div>
+            <button class="btn-submit" onclick="generateRental()">生成合同</button>
+            
+            <div class="result" id="rental-result">
+                <h3>📄 租房合同（草稿）</h3>
+                <pre id="rental-contract"></pre>
+                <div class="disclaimer">⚠️ 本合同为自动生成，仅供参考。具体条款请根据实际情况调整，建议咨询专业律师。</div>
+            </div>
+        </div>
+        
+        <!-- 劳务合同 -->
+        <div class="form-section" id="labor">
+            <div class="form-group">
+                <label>甲方（用人单位）名称 *</label>
+                <input type="text" id="labor-employer" placeholder="请输入甲方名称">
+            </div>
+            <div class="form-group">
+                <label>乙方（劳动者）姓名 *</label>
+                <input type="text" id="labor-worker" placeholder="请输入乙方姓名">
+            </div>
+            <div class="form-group">
+                <label>身份证号码 *</label>
+                <input type="text" id="labor-idcard" placeholder="请输入身份证号码">
+            </div>
+            <div class="form-group">
+                <label>联系电话 *</label>
+                <input type="text" id="labor-phone" placeholder="请输入联系电话">
+            </div>
+            <div class="form-group">
+                <label>工作内容 *</label>
+                <input type="text" id="labor-work" placeholder="请输入工作内容">
+            </div>
+            <div class="form-group">
+                <label>月工资（元） *</label>
+                <input type="number" id="labor-wage" placeholder="请输入月工资">
+            </div>
+            <div class="form-group">
+                <label>合同期限 *</label>
+                <input type="text" id="labor-period" placeholder="如：一年">
+            </div>
+            <button class="btn-submit" onclick="generateLabor()">生成合同</button>
+            
+            <div class="result" id="labor-result">
+                <h3>📄 劳务合同（草稿）</h3>
+                <pre id="labor-contract"></pre>
+            </div>
+        </div>
+        
+        <!-- 买卖合同 -->
+        <div class="form-section" id="sale">
+            <div class="form-group">
+                <label>甲方（卖方）名称 *</label>
+                <input type="text" id="sale-seller" placeholder="请输入甲方名称">
+            </div>
+            <div class="form-group">
+                <label>乙方（买方）名称 *</label>
+                <input type="text" id="sale-buyer" placeholder="请输入乙方名称">
+            </div>
+            <div class="form-group">
+                <label>商品名称 *</label>
+                <input type="text" id="sale-product" placeholder="请输入商品名称">
+            </div>
+            <div class="form-group">
+                <label>商品数量/规格</label>
+                <input type="text" id="sale-quantity" placeholder="如：100件">
+            </div>
+            <div class="form-group">
+                <label>总价（元） *</label>
+                <input type="number" id="sale-price" placeholder="请输入总价">
+            </div>
+            <button class="btn-submit" onclick="generateSale()">生成合同</button>
+            
+            <div class="result" id="sale-result">
+                <h3>📄 买卖合同（草稿）</h3>
+                <pre id="sale-contract"></pre>
+            </div>
+        </div>
+        
+        <!-- 借款合同 -->
+        <div class="form-section" id="loan">
+            <div class="form-group">
+                <label>甲方（出借人）姓名 *</label>
+                <input type="text" id="loan-lender" placeholder="请输入甲方姓名">
+            </div>
+            <div class="form-group">
+                <label>乙方（借款人）姓名 *</label>
+                <input type="text" id="loan-borrower" placeholder="请输入乙方姓名">
+            </div>
+            <div class="form-group">
+                <label>身份证号码</label>
+                <input type="text" id="loan-idcard" placeholder="请输入身份证号码">
+            </div>
+            <div class="form-group">
+                <label>借款金额（元） *</label>
+                <input type="number" id="loan-amount" placeholder="请输入借款金额">
+            </div>
+            <div class="form-group">
+                <label>借款期限 *</label>
+                <input type="text" id="loan-period" placeholder="如：一年">
+            </div>
+            <div class="form-group">
+                <label>利率（年利率%）</label>
+                <input type="text" id="loan-rate" placeholder="如：4" value="0">
+            </div>
+            <button class="btn-submit" onclick="generateLoan()">生成合同</button>
+            
+            <div class="result" id="loan-result">
+                <h3>📄 借款合同（草稿）</h3>
+                <pre id="loan-contract"></pre>
+            </div>
+        </div>
+        
+        <div class="disclaimer">⚠️ 免责声明：本合同为自动生成，仅供参考。具体条款请根据实际情况调整，建议咨询专业律师。</div>
+    </div>
+    
+    <footer class="footer">
+        <p>© 2026 法律知识库 | Wayne's Legal Hub</p>
+    </footer>
+    
+    <script>
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+        
+        function generateRental() {
+            const landlord = document.getElementById('rental-landlord').value;
+            const tenant = document.getElementById('rental-tenant').value;
+            const idcard = document.getElementById('rental-idcard').value;
+            const phone = document.getElementById('rental-phone').value;
+            const address = document.getElementById('rental-address').value;
+            const price = document.getElementById('rental-price').value;
+            const period = document.getElementById('rental-period').value;
+            const deposit = document.getElementById('rental-deposit').value || '0';
+            
+            const date = new Date().toLocaleDateString('zh-CN');
+            const contract = `【租房合同】
+
+甲方（出租人）：${landlord}
+乙方（承租人）：${tenant}
+身份证号：${idcard}
+联系电话：${phone}
+
+根据《中华人民共和国民法典》及相关法律法规，甲乙双方本着平等、自愿的原则，就乙方租用甲方房屋事宜达成如下协议：
+
+一、房屋基本情况
+房屋坐落：${address}
+
+二、租赁期限
+租赁期限：${period}，自____年____月____日起至____年____月____日止。
+
+三、租金及支付方式
+1. 月租金：人民币${price}元（大写：____元整）
+2. 支付方式：乙方应于每月____日前支付租金
+3. 押金：人民币${deposit}元
+
+四、双方权利义务
+（略）
+
+五、违约责任
+（略）
+
+六、其他约定
+（略）
+
+甲方（签字）：__________    乙方（签字）：__________
+日期：${date}`;
+            
+            document.getElementById('rental-contract').textContent = contract;
+            document.getElementById('rental-result').classList.add('show');
+        }
+        
+        function generateLabor() {
+            const employer = document.getElementById('labor-employer').value;
+            const worker = document.getElementById('labor-worker').value;
+            const idcard = document.getElementById('labor-idcard').value;
+            const phone = document.getElementById('labor-phone').value;
+            const work = document.getElementById('labor-work').value;
+            const wage = document.getElementById('labor-wage').value;
+            const period = document.getElementById('labor-period').value;
+            
+            const contract = `【劳务合同】
+
+甲方（用人单位）：${employer}
+乙方（劳动者）：${worker}
+身份证号：${idcard}
+联系电话：${phone}
+
+一、工作内容
+乙方同意在甲方处从事${work}工作。
+
+二、合同期限
+${period}，自____年____月____日起至____年____月____日止。
+
+三、劳动报酬
+月工资：人民币${wage}元
+
+（其他条款略）`;
+            
+            document.getElementById('labor-contract').textContent = contract;
+            document.getElementById('labor-result').classList.add('show');
+        }
+        
+        function generateSale() {
+            const seller = document.getElementById('sale-seller').value;
+            const buyer = document.getElementById('sale-buyer').value;
+            const product = document.getElementById('sale-product').value;
+            const quantity = document.getElementById('sale-quantity').value;
+            const price = document.getElementById('sale-price').value;
+            
+            const contract = `【买卖合同】
+
+甲方（卖方）：${seller}
+乙方（买方）：${buyer}
+
+一、商品信息
+商品名称：${product}
+数量/规格：${quantity}
+
+二、合同金额
+人民币${price}元（大写：____元整）
+
+三、交付时间
+（略）
+
+（其他条款略）`;
+            
+            document.getElementById('sale-contract').textContent = contract;
+            document.getElementById('sale-result').classList.add('show');
+        }
+        
+        function generateLoan() {
+            const lender = document.getElementById('loan-lender').value;
+            const borrower = document.getElementById('loan-borrower').value;
+            const idcard = document.getElementById('loan-idcard').value;
+            const amount = document.getElementById('loan-amount').value;
+            const period = document.getElementById('loan-period').value;
+            const rate = document.getElementById('loan-rate').value;
+            
+            const contract = `【借款合同】
+
+甲方（出借人）：${lender}
+乙方（借款人）：${borrower}
+身份证号：${idcard}
+
+一、借款金额
+人民币${amount}元（大写：____元整）
+
+二、借款期限
+${period}
+
+三、借款利率
+年利率：${rate}%
+
+（其他条款略）`;
+            
+            document.getElementById('loan-contract').textContent = contract;
+            document.getElementById('loan-result').classList.add('show');
+        }
+    </script>
+</body>
+</html>

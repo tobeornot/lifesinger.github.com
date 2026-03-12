@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>法条精准检索 - 法律知识库</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #1a73e8; --light: #f8f9fa; --dark: #1f1f1f; --gray: #6c757d; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans SC', sans-serif; background: var(--light); color: var(--dark); line-height: 1.6; }
+        
+        .header { background: linear-gradient(135deg, #1a73e8 0%, #667eea 100%); color: white; padding: 30px 20px; text-align: center; }
+        .header a { color: white; text-decoration: none; }
+        
+        .container { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+        
+        .search-box { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .search-box input { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1.1rem; margin-bottom: 15px; }
+        .search-box input:focus { outline: none; border-color: var(--primary); }
+        .search-box button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; }
+        
+        .quick-links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
+        .quick-links button { padding: 8px 15px; background: #e3f2fd; border: none; border-radius: 20px; cursor: pointer; font-size: 0.9rem; color: var(--primary); }
+        
+        .result { display: none; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .result.show { display: block; }
+        .law-item { padding: 15px 0; border-bottom: 1px solid #eee; }
+        .law-item:last-child { border-bottom: none; }
+        .law-title { font-weight: 600; color: var(--primary); margin-bottom: 8px; }
+        .law-content { color: var(--dark); font-size: 0.95rem; }
+        
+        .footer { text-align: center; padding: 20px; color: var(--gray); }
+    </style>
+</head>
+<body>
+    <!-- 导航 -->
+    <nav style="background: white; padding: 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; height: 60px;">
+            <a href="index.html" style="font-weight: 700; font-size: 1.2rem; color: #1a73e8; text-decoration: none; display: flex; align-items: center; gap: 8px;">⚖️ Legal Hub</a>
+            <ul style="display: flex; gap: 5px; list-style: none; align-items: center;">
+                <li><a href="index.html" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: block;">首页</a></li>
+                <li style="position: relative;">
+                    <a href="javascript:void(0)" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 4px;">实用工具 ▾</a>
+                    <div style="display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-radius: 12px; overflow: hidden; padding: 8px 0;" class="dropdown-content">
+                        <a href="tool-compensation.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">💰 赔偿金额计算</a>
+                        <a href="tool-contract.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">📝 智能合同生成</a>
+                        <a href="tool-fee.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">⚖️ 诉讼费计算</a>
+                        <a href="tool-law-search.html" style="padding: 10px 20px; display: block; color: #1a73e8; background: rgba(26,115,232,0.1);">🔍 法规查询</a>
+                    </div>
+                </li>
+                <li style="position: relative;">
+                    <a href="javascript:void(0)" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 4px;">法规 ▾</a>
+                    <div style="display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-radius: 12px; overflow: hidden; padding: 8px 0;" class="dropdown-content">
+                        <a href="法规/民间借贷/index.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">📋 民间借贷</a>
+                    </div>
+                </li>
+                <li style="position: relative;">
+                    <a href="javascript:void(0)" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 4px;">案例 ▾</a>
+                    <div style="display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-radius: 12px; overflow: hidden; padding: 8px 0;" class="dropdown-content">
+                        <a href="案例/民间借贷/index.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">⚖️ 民间借贷</a>
+                    </div>
+                </li>
+                <li style="position: relative;">
+                    <a href="javascript:void(0)" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 4px;">实践 ▾</a>
+                    <div style="display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-radius: 12px; overflow: hidden; padding: 8px 0;" class="dropdown-content">
+                        <a href="实践/执行流程指南/index.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">📖 执行流程指南</a>
+                    </div>
+                </li>
+                <li style="position: relative;">
+                    <a href="javascript:void(0)" style="color: #1f1f1f; text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 4px;">模板 ▾</a>
+                    <div style="display: none; position: absolute; top: 100%; left: 0; background: white; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-radius: 12px; overflow: hidden; padding: 8px 0;" class="dropdown-content">
+                        <a href="模板/执行申请书/index.html" style="padding: 10px 20px; display: block; color: #1f1f1f; text-decoration: none;">📄 执行申请书</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <script>
+        document.querySelectorAll('li').forEach(function(dropdown) {
+            if (dropdown.querySelector('.dropdown-content')) {
+                dropdown.addEventListener('mouseenter', function() {
+                    this.querySelector('.dropdown-content').style.display = 'block';
+                });
+                dropdown.addEventListener('mouseleave', function() {
+                    this.querySelector('.dropdown-content').style.display = 'none';
+                });
+            }
+        });
+    </script>
+    
+    <header class="header">
+        <a href="index.html">← 返回首页</a>
+        <h1>📖 法条精准检索</h1>
+        <p>快速查询最新有效法律条文</p>
+    </header>
+    
+    <div class="container">
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="输入关键词或法律名称...">
+            <button onclick="searchLaw()">🔍 搜索</button>
+            <div class="quick-links">
+                <button onclick="quickSearch('民间借贷')">民间借贷</button>
+                <button onclick="quickSearch('劳动合同')">劳动合同</button>
+                <button onclick="quickSearch('交通事故')">交通事故</button>
+                <button onclick="quickSearch('婚姻法')">婚姻法</button>
+                <button onclick="quickSearch('刑法')">刑法</button>
+            </div>
+        </div>
+        
+        <div class="result" id="result">
+            <h3 style="margin-bottom:15px;">搜索结果</h3>
+            <div id="result-content"></div>
+        </div>
+    </div>
+    
+    <footer class="footer"><p>© 2026 法律知识库</p></footer>
+    
+    <script>
+        const laws = [
+            { title: '《民法典》第一千一百七十九条 - 人身损害赔偿', content: '侵害他人造成人身损害的，应当赔偿医疗费、护理费、交通费、营养费、住院伙食补助费等为治疗和康复支出的合理费用，以及因误工减少的收入。造成残疾的，还应当赔偿辅助器具费和残疾赔偿金。' },
+            { title: '《民法典》第一千一百八十四条 - 财产损害赔偿', content: '侵害他人财产的，财产损失按照损失发生时的市场价格或者其他合理方式计算。' },
+            { title: '《劳动合同法》第八十二条 - 不订立书面劳动合同的法律责任', content: '用人单位自用工之日起超过一个月不满一年未与劳动者订立书面劳动合同的，应当向劳动者每月支付二倍的工资。' },
+            { title: '《劳动合同法》第四十六条 - 经济补偿', content: '有下列情形之一的，用人单位应当向劳动者支付经济补偿：（一）劳动者依照本法第三十八条规定解除劳动合同的...' },
+            { title: '《民法典》第六百八十条 - 借款合同利率', content: '禁止高利放贷，借款的利率不得违反国家有关规定。借款合同对支付利息没有约定的，视为没有利息。' },
+            { title: '《最高人民法院关于审理民间借贷案件适用法律若干问题的规定', content: '出借人请求借款人按照合同约定利率支付利息的，人民法院应予支持，但是双方约定的利率超过合同成立时一年期贷款市场报价利率四倍的除外。' },
+            { title: '《道路交通安全法》第七十六条 - 交通事故责任', content: '机动车发生交通事故造成人身伤亡、财产损失的，由保险公司在机动车第三者责任强制保险责任限额范围内予以赔偿。' },
+            { title: '《工伤保险条例》第十四条 - 工伤认定', content: '职工有下列情形之一的，应当认定为工伤：（一）在工作时间和工作场所内，因工作原因受到事故伤害的...' },
+        ];
+        
+        function searchLaw() {
+            const keyword = document.getElementById('search-input').value.trim();
+            if (!keyword) return;
+            
+            const results = laws.filter(law => 
+                law.title.includes(keyword) || law.content.includes(keyword)
+            );
+            
+            const html = results.length ? results.map(law => `
+                <div class="law-item">
+                    <div class="law-title">${law.title}</div>
+                    <div class="law-content">${law.content}</div>
+                </div>
+            `).join('') : '<p style="color:#666;">未找到相关法条，请尝试其他关键词</p>';
+            
+            document.getElementById('result-content').innerHTML = html;
+            document.getElementById('result').classList.add('show');
+        }
+        
+        function quickSearch(keyword) {
+            document.getElementById('search-input').value = keyword;
+            searchLaw();
+        }
+    </script>
+</body>
+</html>

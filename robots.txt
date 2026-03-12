@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://wzm1992.top/sitemap.xml
