@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>违约金计算器 - 法律知识库</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #1a73e8; --primary-dark: #1557b0; --success: #34a853; --light: #f8f9fa; --dark: #1f1f1f; --gray: #6c757d; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans SC', sans-serif; background: var(--light); color: var(--dark); }
+        
+        /* Navigation */
+        .nav { background: white; padding: 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .nav-content { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; height: 50px; }
+        .nav-logo { font-weight: 700; font-size: 1.1rem; color: var(--primary); text-decoration: none; }
+        .nav-links { display: flex; gap: 8px; list-style: none; }
+        .nav-links a { color: var(--dark); text-decoration: none; font-size: 0.9rem; padding: 6px 10px; border-radius: 6px; }
+        .nav-links a:hover { background: rgba(26,115,232,0.1); }
+        
+        .header { background: linear-gradient(135deg, #1a73e8 0%, #667eea 100%); color: white; padding: 30px 20px; text-align: center; }
+        .header a { color: white; text-decoration: none; }
+        
+        .container { max-width: 800px; margin: 0 auto; padding: 30px 20px; }
+        
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab { flex: 1; padding: 10px; background: white; border: 2px solid #e0e0e0; border-radius: 8px; text-align: center; cursor: pointer; font-weight: 500; }
+        .tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        
+        .card { background: white; border-radius: 12px; padding: 25px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .card h3 { color: var(--primary); margin-bottom: 20px; font-size: 1.1rem; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; }
+        .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 0.95rem; }
+        .form-group input:focus { outline: none; border-color: var(--primary); }
+        
+        .btn { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; }
+        .btn:hover { background: var(--primary-dark); }
+        
+        .result { display: none; margin-top: 20px; padding: 20px; background: #e8f5e9; border-radius: 10px; }
+        .result.show { display: block; }
+        .result-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .result-row:last-child { border-bottom: none; }
+        .result-value { font-weight: 600; color: var(--primary); }
+        .result-value.highlight { color: #ea4335; font-size: 1.1rem; }
+        
+        .info { margin-top: 20px; padding: 15px; background: #fff3e0; border-radius: 8px; font-size: 0.85rem; }
+        
+        @media (max-width: 768px) {
+            .nav-content { padding: 0 10px; overflow-x: auto; }
+            .nav-links { gap: 5px; }
+            .nav-links a { padding: 5px 8px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="index.html" class="nav-logo">⚖️</a>
+            <ul class="nav-links">
+                <li><a href="tool-compensation.html">赔偿</a></li>
+                <li><a href="tool-interest.html">利息</a></li>
+                <li><a href="tool-date.html">时效</a></li>
+                <li><a href="tool-court.html">法院</a></li>
+                <li><a href="tool-contract.html">合同</a></li>
+                <li><a href="tool-fee.html">诉讼费</a></li>
+                <li><a href="tool-lawyer.html">律师费</a></li>
+                <li><a href="tool-penalty.html" style="color:var(--primary);font-weight:600;">违约金</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <header class="header">
+        <a href="index.html">← 返回首页</a>
+        <h1>💰 违约金计算器</h1>
+        <p>合同违约金/滞纳金计算</p>
+    </header>
+    
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('contract')">合同约定违约金</div>
+            <div class="tab" onclick="switchTab('delay')">迟延履行金</div>
+        </div>
+        
+        <!-- 合同违约金 -->
+        <div id="contract-panel">
+            <div class="card">
+                <h3>📝 合同违约金计算</h3>
+                <div class="form-group">
+                    <label>本金（元）</label>
+                    <input type="number" id="principal" placeholder="请输入欠款金额">
+                </div>
+                <div class="form-group">
+                    <label>合同约定日利率（%）</label>
+                    <input type="number" id="daily-rate" placeholder="如：0.05" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>起始日期</label>
+                    <input type="date" id="start-date">
+                </div>
+                <div class="form-group">
+                    <label>截止日期</label>
+                    <input type="date" id="end-date">
+                </div>
+                <button class="btn" onclick="calculateContract()">计算违约金</button>
+                
+                <div class="result" id="contract-result">
+                    <div class="result-row"><span>本金</span><span class="result-value" id="c-principal">¥0</span></div>
+                    <div class="result-row"><span>违约天数</span><span class="result-value" id="c-days">0天</span></div>
+                    <div class="result-row"><span>约定违约金</span><span class="result-value" id="c-penalty">¥0</span></div>
+                    <div class="result-row"><span>违约金总额</span><span class="result-value highlight" id="c-total">¥0</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 迟延履行金 -->
+        <div id="delay-panel" style="display:none;">
+            <div class="card">
+                <h3>⏰ 迟延履行金计算</h3>
+                <div class="form-group">
+                    <label>标的金额（元）</label>
+                    <input type="number" id="delay-amount" placeholder="请输入标的金额">
+                </div>
+                <div class="form-group">
+                    <label>迟延天数</label>
+                    <input type="number" id="delay-days" placeholder="请输入迟延天数">
+                </div>
+                <div class="form-group">
+                    <label>案件类型</label>
+                    <select id="delay-type">
+                        <option value="1.5">民事案件（每日万分之1.75）</option>
+                        <option value="1">一般债务（每日万分之1）</option>
+                        <option value="2">迟延交付标的（每日2‰）</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="calculateDelay()">计算迟延履行金</button>
+                
+                <div class="result" id="delay-result">
+                    <div class="result-row"><span>标的金额</span><span class="result-value" id="d-amount">¥0</span></div>
+                    <div class="result-row"><span>迟延天数</span><span class="result-value" id="d-days">0天</span></div>
+                    <div class="result-row"><span>迟延履行金</span><span class="result-value highlight" id="d-total">¥0</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="info">
+            <strong>💡 提示：</strong>
+            <ul style="margin-top:8px;padding-left:20px;">
+                <li>民间借贷司法保护上限为合同成立时LPR的4倍</li>
+                <li>约定的违约金低于实际损失的，可请求增加</li>
+                <li>迟延履行金适用于判决书确定的义务</li>
+                <li>以上仅供参考，具体以法院判决为准</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+    function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        if (tab === 'contract') {
+            document.getElementById('contract-panel').style.display = 'block';
+            document.getElementById('delay-panel').style.display = 'none';
+        } else {
+            document.getElementById('contract-panel').style.display = 'none';
+            document.getElementById('delay-panel').style.display = 'block';
+        }
+    }
+    
+    function calculateContract() {
+        const principal = parseFloat(document.getElementById('principal').value) || 0;
+        const dailyRate = parseFloat(document.getElementById('daily-rate').value) || 0;
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
+        
+        if (!principal || !dailyRate || !startDate || !endDate) {
+            alert('请填写完整信息');
+            return;
+        }
+        
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+        
+        if (days <= 0) {
+            alert('截止日期必须晚于起始日期');
+            return;
+        }
+        
+        const penalty = principal * (dailyRate / 100) * days;
+        const total = principal + penalty;
+        
+        document.getElementById('c-principal').textContent = '¥' + principal.toLocaleString();
+        document.getElementById('c-days').textContent = days + '天';
+        document.getElementById('c-penalty').textContent = '¥' + Math.round(penalty).toLocaleString();
+        document.getElementById('c-total').textContent = '¥' + Math.round(total).toLocaleString();
+        document.getElementById('contract-result').classList.add('show');
+    }
+    
+    function calculateDelay() {
+        const amount = parseFloat(document.getElementById('delay-amount').value) || 0;
+        const days = parseInt(document.getElementById('delay-days').value) || 0;
+        const rate = parseFloat(document.getElementById('delay-type').value) || 1.5;
+        
+        if (!amount || !days) {
+            alert('请填写完整信息');
+            return;
+        }
+        
+        const total = amount * (rate / 10000) * days;
+        
+        document.getElementById('d-amount').textContent = '¥' + amount.toLocaleString();
+        document.getElementById('d-days').textContent = days + '天';
+        document.getElementById('d-total').textContent = '¥' + Math.round(total).toLocaleString();
+        document.getElementById('delay-result').classList.add('show');
+    }
+    </script>
+</body>
+</html>
