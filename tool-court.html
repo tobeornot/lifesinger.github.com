@@ -305,9 +305,9 @@
     <div class="container">
         <!-- Tabs -->
         <div class="tabs">
-            <div class="tab active" onclick="switchTab(this, 'civil')">民事管辖</div>
-            <div class="tab" onclick="switchTab(this, 'traffic')">交通事故</div>
-            <div class="tab" onclick="switchTab(this, 'labor')">劳动争议</div>
+            <div class="tab active" onclick="switchTab('civil')">民事管辖</div>
+            <div class="tab" onclick="switchTab('traffic')">交通事故</div>
+            <div class="tab" onclick="switchTab('labor')">劳动争议</div>
         </div>
         
         <!-- Civil -->
@@ -370,7 +370,7 @@
         </div>
         
         <!-- Traffic -->
-        <div class="form-section" id="traffic">
+        <div class="form-section" id="traffic" style="display:none;">
             <div class="card">
                 <h3>🚗 交通事故管辖法院</h3>
                 
@@ -409,7 +409,7 @@
         </div>
         
         <!-- Labor -->
-        <div class="form-section" id="labor">
+        <div class="form-section" id="labor" style="display:none;">
             <div class="card">
                 <h3>👷 劳动争议管辖法院</h3>
                 
@@ -480,11 +480,19 @@
     
     <script>
         // Tab switching
-        function switchTab(el, tabName) {
+        function switchTab(tabName) {
+            // Hide all tabs and contents
+            document.getElementById('civil').style.display = 'none';
+            document.getElementById('traffic').style.display = 'none';
+            document.getElementById('labor').style.display = 'none';
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
-            el.classList.add('active');
-            document.getElementById(tabName).classList.add('active');
+            // Show selected tab
+            document.getElementById(tabName).style.display = 'block';
+            // Highlight selected tab
+            var tabs = document.querySelectorAll('.tab');
+            if(tabName == 'civil') tabs[0].classList.add('active');
+            if(tabName == 'traffic') tabs[1].classList.add('active');
+            if(tabName == 'labor') tabs[2].classList.add('active');
         }
         
         function calculateCivil() {
