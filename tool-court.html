@@ -305,9 +305,9 @@
     <div class="container">
         <!-- Tabs -->
         <div class="tabs">
-            <div class="tab active" data-tab="civil">民事管辖</div>
-            <div class="tab" data-tab="traffic">交通事故</div>
-            <div class="tab" data-tab="labor">劳动争议</div>
+            <div class="tab active" onclick="switchTab(this, 'civil')">民事管辖</div>
+            <div class="tab" onclick="switchTab(this, 'traffic')">交通事故</div>
+            <div class="tab" onclick="switchTab(this, 'labor')">劳动争议</div>
         </div>
         
         <!-- Civil -->
@@ -480,17 +480,12 @@
     
     <script>
         // Tab switching
-        document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
-                
-                this.classList.add('active');
-                document.getElementById(this.dataset.tab).classList.add('active');
-            });
-        });
-        });
+        function switchTab(el, tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
         
         function calculateCivil() {
             const type = document.getElementById('civil-type').value;
