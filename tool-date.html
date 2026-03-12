@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>诉讼时效计算器 - 法律知识库</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #1557b0;
+            --success: #34a853;
+            --warning: #fbbc04;
+            --danger: #ea4335;
+            --light: #f8f9fa;
+            --dark: #1f1f1f;
+            --gray: #6c757d;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .nav {
+            background: white;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+        
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 5px;
+            list-style: none;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            display: block;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a73e8 0%, #667eea 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+        
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .result {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-radius: 12px;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .result-row:last-child {
+            border-bottom: none;
+        }
+        
+        .result-value.highlight {
+            color: var(--danger);
+            font-weight: 600;
+        }
+        
+        .result-value.warning {
+            color: var(--warning);
+            font-weight: 600;
+        }
+        
+        .expired {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%) !important;
+        }
+        
+        .expired .result-value {
+            color: var(--danger) !important;
+        }
+        
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .info-table th,
+        .info-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-table th {
+            background: #f5f5f5;
+            font-weight: 500;
+        }
+        
+        .info-table tr:hover {
+            background: #fafafa;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .tag-danger {
+            background: #ffebee;
+            color: var(--danger);
+        }
+        
+        .tag-warning {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        
+        .tag-success {
+            background: #e8f5e9;
+            color: var(--success);
+        }
+        
+        .footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="index.html" class="nav-logo">⚖️ Legal Hub</a>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="tool-compensation.html">赔偿计算</a></li>
+                <li><a href="tool-interest.html">利息计算</a></li>
+                <li><a href="tool-date.html" style="color: var(--primary);">时效计算</a></li>
+                <li><a href="tool-court.html">管辖法院</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <header class="header">
+        <a href="index.html">← 返回首页</a>
+        <h1>⏰ 诉讼时效计算器</h1>
+        <p>计算诉讼时效期间/上诉期限/答辩期</p>
+    </header>
+    
+    <div class="container">
+        <!-- Quick Reference -->
+        <div class="card">
+            <h3>📋 诉讼时效速查表</h3>
+            <table class="info-table">
+                <thead>
+                    <tr>
+                        <th>案件类型</th>
+                        <th>时效期间</th>
+                        <th>起算点</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>民间借贷</td>
+                        <td><span class="tag tag-danger">3年</span></td>
+                        <td>约定还款期限届满</td>
+                    </tr>
+                    <tr>
+                        <td>合同纠纷</td>
+                        <td><span class="tag tag-danger">3年</span></td>
+                        <td>知道或应当知道权利被侵害</td>
+                    </tr>
+                    <tr>
+                        <td>侵权纠纷</td>
+                        <td><span class="tag tag-danger">3年</span></td>
+                        <td>知道或应当知道侵权行为</td>
+                    </tr>
+                    <tr>
+                        <td>人格权</td>
+                        <td><span class="tag tag-warning">3年</span></td>
+                        <td>知道或应当知道权利被侵害</td>
+                    </tr>
+                    <tr>
+                        <td>不动产</td>
+                        <td><span class="tag tag-success">无期限</span></td>
+                        <td>登记之日起算</td>
+                    </tr>
+                    <tr>
+                        <td>抚养费</td>
+                        <td><span class="tag tag-warning">3年</span></td>
+                        <td>权利人成年时起算</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Calculator -->
+        <div class="card">
+            <h3>🧮 时效期间计算</h3>
+            <div class="form-group">
+                <label>案件类型</label>
+                <select id="case-type">
+                    <option value="3">民间借贷（3年）</option>
+                    <option value="3">合同纠纷（3年）</option>
+                    <option value="3">侵权纠纷（3年）</option>
+                    <option value="3">人格权纠纷（3年）</option>
+                    <option value="20">不动产纠纷（20年）</option>
+                    <option value="1">上诉期限（15日/10日）</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>权利产生/起算日期 *</label>
+                <input type="date" id="start-date">
+            </div>
+            
+            <div class="form-group">
+                <label>今日日期（计算截止日）</label>
+                <input type="date" id="end-date">
+            </div>
+            
+            <button class="btn" onclick="calculateLimit()">计算时效</button>
+            
+            <div class="result" id="limit-result">
+                <div class="result-row">
+                    <span>案件类型</span>
+                    <span class="result-value" id="result-type">-</span>
+                </div>
+                <div class="result-row">
+                    <span>时效期间</span>
+                    <span class="result-value" id="result-years">-</span>
+                </div>
+                <div class="result-row">
+                    <span>起算日期</span>
+                    <span class="result-value" id="result-start">-</span>
+                </div>
+                <div class="result-row">
+                    <span>届满日期</span>
+                    <span class="result-value" id="result-expire">-</span>
+                </div>
+                <div class="result-row">
+                    <span>已过/剩余</span>
+                    <span class="result-value" id="result-remaining">-</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Appeal Period -->
+        <div class="card">
+            <h3>⚡ 上诉期限计算</h3>
+            <div class="form-group">
+                <label>裁判文书送达日期 *</label>
+                <input type="date" id="appeal-start">
+            </div>
+            
+            <div class="form-group">
+                <label>案件类型</label>
+                <select id="appeal-type">
+                    <option value="15">民事案件（15日）</option>
+                    <option value="10">民事裁定（10日）</option>
+                    <option value="15">行政案件（15日）</option>
+                    <option value="10">行政裁定（10日）</option>
+                    <option value="5">刑事判决（10日）</option>
+                    <option value="5">刑事裁定（5日）</option>
+                </select>
+            </div>
+            
+            <button class="btn" onclick="calculateAppeal()">计算上诉期限</button>
+            
+            <div class="result" id="appeal-result">
+                <div class="result-row">
+                    <span>送达日期</span>
+                    <span class="result-value" id="appeal-result-start">-</span>
+                </div>
+                <div class="result-row">
+                    <span>上诉期限</span>
+                    <span class="result-value" id="appeal-result-days">-</span>
+                </div>
+                <div class="result-row">
+                    <span>届满日期</span>
+                    <span class="result-value" id="appeal-result-expire">-</span>
+                </div>
+                <div class="result-row">
+                    <span>剩余时间</span>
+                    <span class="result-value" id="appeal-result-remaining">-</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Important Notes -->
+        <div class="card" style="background: #fff3e0;">
+            <h3>⚠️ 重要提示</h3>
+            <ul style="padding-left: 20px; line-height: 2;">
+                <li>诉讼时效期间届满，债务人获得抗辩权，但不丧失实体权利</li>
+                <li>时效中断：权利人主张权利、债务人承认等情形下时效重新计算</li>
+                <li>最长保护期间为20年（特殊情况下可申请延长）</li>
+                <li>上诉期限最后一日为节假日的，以节假日后的第一日为期间届满日</li>
+            </ul>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>© 2026 法律知识库 | Wayne's Legal Hub</p>
+    </footer>
+    
+    <script>
+        // Set default end date to today
+        document.getElementById('end-date').valueAsDate = new Date();
+        
+        function calculateLimit() {
+            const caseType = document.getElementById('case-type').value;
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            
+            if (!startDate) {
+                alert('请选择起算日期');
+                return;
+            }
+            
+            const start = new Date(startDate);
+            const years = parseInt(caseType);
+            const expire = new Date(start);
+            expire.setFullYear(expire.getFullYear() + years);
+            
+            const end = endDate ? new Date(endDate) : new Date();
+            const daysRemaining = Math.ceil((expire - end) / (1000 * 60 * 60 * 24));
+            
+            const typeMap = {
+                '3': '民间借贷/合同/侵权纠纷',
+                '20': '不动产纠纷'
+            };
+            
+            document.getElementById('result-type').textContent = typeMap[caseType] || '一般民事纠纷';
+            document.getElementById('result-years').textContent = years + '年';
+            document.getElementById('result-start').textContent = startDate;
+            document.getElementById('result-expire').textContent = expire.toISOString().split('T')[0];
+            
+            const resultEl = document.getElementById('limit-result');
+            if (daysRemaining <= 0) {
+                document.getElementById('result-remaining').textContent = '已届满 ' + Math.abs(daysRemaining) + ' 天';
+                document.getElementById('result-remaining').className = 'result-value warning';
+                resultEl.classList.add('expired');
+            } else {
+                document.getElementById('result-remaining').textContent = '剩余 ' + daysRemaining + ' 天';
+                document.getElementById('result-remaining').className = 'result-value highlight';
+                resultEl.classList.remove('expired');
+            }
+            
+            resultEl.classList.add('show');
+        }
+        
+        function calculateAppeal() {
+            const startDate = document.getElementById('appeal-start').value;
+            const days = parseInt(document.getElementById('appeal-type').value);
+            
+            if (!startDate) {
+                alert('请选择送达日期');
+                return;
+            }
+            
+            const start = new Date(startDate);
+            const expire = new Date(start);
+            expire.setDate(expire.getDate() + days);
+            
+            const today = new Date();
+            const remaining = Math.ceil((expire - today) / (1000 * 60 * 60 * 24));
+            
+            document.getElementById('appeal-result-start').textContent = startDate;
+            document.getElementById('appeal-result-days').textContent = days + '日';
+            document.getElementById('appeal-result-expire').textContent = expire.toISOString().split('T')[0];
+            
+            const remainingEl = document.getElementById('appeal-result-remaining');
+            const resultEl = document.getElementById('appeal-result');
+            
+            if (remaining <= 0) {
+                remainingEl.textContent = '已届满！';
+                remainingEl.className = 'result-value warning';
+                resultEl.classList.add('expired');
+            } else {
+                remainingEl.textContent = '剩余 ' + remaining + ' 天';
+                remainingEl.className = 'result-value highlight';
+                resultEl.classList.remove('expired');
+            }
+            
+            resultEl.classList.add('show');
+        }
+    </script>
+</body>
+</html>

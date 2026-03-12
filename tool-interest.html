@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>利息计算器 - 法律知识库</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #1557b0;
+            --success: #34a853;
+            --warning: #fbbc04;
+            --danger: #ea4335;
+            --light: #f8f9fa;
+            --dark: #1f1f1f;
+            --gray: #6c757d;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        /* Navigation */
+        .nav {
+            background: white;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+        
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 5px;
+            list-style: none;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            display: block;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+            background: rgba(26,115,232,0.08);
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1a73e8 0%, #667eea 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* Form */
+        .form-section {
+            display: none;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .form-group .hint {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Result */
+        .result {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-radius: 12px;
+            border-left: 4px solid var(--success);
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result h4 {
+            color: var(--success);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .result-row:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            color: var(--gray);
+        }
+        
+        .result-value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .result-value.highlight {
+            color: var(--danger);
+            font-size: 1.2rem;
+        }
+        
+        /* Info Box */
+        .info-box {
+            margin-top: 25px;
+            padding: 20px;
+            background: #fff3e0;
+            border-radius: 12px;
+            border-left: 4px solid var(--warning);
+        }
+        
+        .info-box h4 {
+            color: #e65100;
+            margin-bottom: 10px;
+        }
+        
+        .info-box p {
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="index.html" class="nav-logo">⚖️ Legal Hub</a>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="tool-compensation.html">赔偿计算</a></li>
+                <li><a href="tool-contract.html">合同生成</a></li>
+                <li><a href="tool-fee.html">诉讼费</a></li>
+                <li><a href="tool-interest.html" style="color: var(--primary);">利息计算</a></li>
+                <li><a href="tool-date.html">时效计算</a></li>
+                <li><a href="tool-court.html">管辖法院</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <header class="header">
+        <a href="index.html">← 返回首页</a>
+        <h1>🧮 利息计算器</h1>
+        <p>法定利息/逾期利息/LPR利率计算</p>
+    </header>
+    
+    <div class="container">
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" data-tab="lpr">LPR利率计算</div>
+            <div class="tab" data-tab="default">法定利息</div>
+            <div class="tab" data-tab="overdue">逾期利息</div>
+        </div>
+        
+        <!-- LPR Calculation -->
+        <div class="form-section active" id="lpr">
+            <div class="form-group">
+                <label>本金（元） *</label>
+                <input type="number" id="lpr-principal" placeholder="请输入借款本金">
+            </div>
+            
+            <div class="form-group">
+                <label>起始日期 *</label>
+                <input type="date" id="lpr-start">
+            </div>
+            
+            <div class="form-group">
+                <label>截止日期 *</label>
+                <input type="date" id="lpr-end">
+            </div>
+            
+            <div class="form-group">
+                <label>选择LPR利率类型</label>
+                <select id="lpr-type">
+                    <option value="3.45">1年期LPR (3.45%) - 2024年7月</option>
+                    <option value="3.85">1年期LPR (3.85%) - 历史常用</option>
+                    <option value="4.2">1年期LPR (4.2%) - 2022年8月-2023年6月</option>
+                    <option value="3.65">1年期LPR (3.65%) - 2023年8月-2024年7月</option>
+                </select>
+                <div class="hint">民间借贷适用1年期LPR</div>
+            </div>
+            
+            <button class="btn" onclick="calculateLPR()">计算利息</button>
+            
+            <div class="result" id="lpr-result">
+                <h4>📊 LPR利息计算结果</h4>
+                <div class="result-row">
+                    <span class="result-label">借款本金</span>
+                    <span class="result-value" id="lpr-result-principal">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">计息天数</span>
+                    <span class="result-value" id="lpr-result-days">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">LPR利率</span>
+                    <span class="result-value" id="lpr-result-rate">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">利息金额</span>
+                    <span class="result-value highlight" id="lpr-result-interest">-</span>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <h4>📌 LPR利率说明</h4>
+                <p>自2020年8月20日起，民间借贷利率的司法保护上限改为合同成立时一年期LPR的4倍。目前一年期LPR为3.45%，司法保护上限为13.8%。</p>
+            </div>
+        </div>
+        
+        <!-- Default Interest -->
+        <div class="form-section" id="default">
+            <div class="form-group">
+                <label>本金（元） *</label>
+                <input type="number" id="default-principal" placeholder="请输入借款本金">
+            </div>
+            
+            <div class="form-group">
+                <label>起始日期 *</label>
+                <input type="date" id="default-start">
+            </div>
+            
+            <div class="form-group">
+                <label>截止日期 *</label>
+                <input type="date" id="default-end">
+            </div>
+            
+            <div class="form-group">
+                <label>合同约定利率（年利率%）</label>
+                <input type="number" id="default-rate" placeholder="如：15" step="0.1">
+                <div class="hint">未约定默认为合同成立时一年期LPR的4倍</div>
+            </div>
+            
+            <button class="btn" onclick="calculateDefault()">计算利息</button>
+            
+            <div class="result" id="default-result">
+                <h4>📊 法定利息计算结果</h4>
+                <div class="result-row">
+                    <span class="result-label">借款本金</span>
+                    <span class="result-value" id="default-result-principal">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">计息天数</span>
+                    <span class="result-value" id="default-result-days">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">适用利率</span>
+                    <span class="result-value" id="default-result-rate">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">利息金额</span>
+                    <span class="result-value highlight" id="default-result-interest">-</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Overdue Interest -->
+        <div class="form-section" id="overdue">
+            <div class="form-group">
+                <label>本金（元） *</label>
+                <input type="number" id="overdue-principal" placeholder="请输入欠款金额">
+            </div>
+            
+            <div class="form-group">
+                <label>逾期天数 *</label>
+                <input type="number" id="overdue-days" placeholder="请输入逾期天数">
+            </div>
+            
+            <div class="form-group">
+                <label>合同约定利率（年利率%）</label>
+                <input type="number" id="overdue-rate" placeholder="如：24" step="0.1">
+                <div class="hint">一般不超过合同成立时LPR的4倍</div>
+            </div>
+            
+            <button class="btn" onclick="calculateOverdue()">计算逾期利息</button>
+            
+            <div class="result" id="overdue-result">
+                <h4>📊 逾期利息计算结果</h4>
+                <div class="result-row">
+                    <span class="result-label">欠款金额</span>
+                    <span class="result-value" id="overdue-result-principal">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">逾期天数</span>
+                    <span class="result-value" id="overdue-result-days">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">逾期利率</span>
+                    <span class="result-value" id="overdue-result-rate">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">逾期利息</span>
+                    <span class="result-value highlight" id="overdue-result-interest">-</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">本息合计</span>
+                    <span class="result-value highlight" id="overdue-result-total">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>© 2026 法律知识库 | Wayne's Legal Hub</p>
+    </footer>
+    
+    <script>
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+                
+                this.classList.add('active');
+                document.getElementById(this.dataset.tab).classList.add('active');
+            });
+        });
+        
+        // LPR Calculation
+        function calculateLPR() {
+            const principal = parseFloat(document.getElementById('lpr-principal').value);
+            const startDate = document.getElementById('lpr-start').value;
+            const endDate = document.getElementById('lpr-end').value;
+            const rate = parseFloat(document.getElementById('lpr-type').value);
+            
+            if (!principal || !startDate || !endDate) {
+                alert('请填写所有必填项');
+                return;
+            }
+            
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+            
+            if (days <= 0) {
+                alert('截止日期必须晚于起始日期');
+                return;
+            }
+            
+            // LPR的4倍为法定上限
+            const maxRate = rate * 4;
+            const interest = principal * (maxRate / 100) * (days / 365);
+            
+            document.getElementById('lpr-result-principal').textContent = '¥' + principal.toLocaleString();
+            document.getElementById('lpr-result-days').textContent = days + '天';
+            document.getElementById('lpr-result-rate').textContent = maxRate + '% (LPR×4)';
+            document.getElementById('lpr-result-interest').textContent = '¥' + interest.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('lpr-result').classList.add('show');
+        }
+        
+        // Default Interest Calculation
+        function calculateDefault() {
+            const principal = parseFloat(document.getElementById('default-principal').value);
+            const startDate = document.getElementById('default-start').value;
+            const endDate = document.getElementById('default-end').value;
+            let rate = parseFloat(document.getElementById('default-rate').value);
+            
+            if (!principal || !startDate || !endDate) {
+                alert('请填写所有必填项');
+                return;
+            }
+            
+            // 未约定利率则按LPR的4倍
+            if (!rate) {
+                rate = 3.45 * 4;
+            }
+            
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+            
+            if (days <= 0) {
+                alert('截止日期必须晚于起始日期');
+                return;
+            }
+            
+            const interest = principal * (rate / 100) * (days / 365);
+            
+            document.getElementById('default-result-principal').textContent = '¥' + principal.toLocaleString();
+            document.getElementById('default-result-days').textContent = days + '天';
+            document.getElementById('default-result-rate').textContent = rate + '%';
+            document.getElementById('default-result-interest').textContent = '¥' + interest.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('default-result').classList.add('show');
+        }
+        
+        // Overdue Interest Calculation
+        function calculateOverdue() {
+            const principal = parseFloat(document.getElementById('overdue-principal').value);
+            const days = parseInt(document.getElementById('overdue-days').value);
+            let rate = parseFloat(document.getElementById('overdue-rate').value);
+            
+            if (!principal || !days) {
+                alert('请填写所有必填项');
+                return;
+            }
+            
+            // 未约定则按LPR的4倍
+            if (!rate) {
+                rate = 3.45 * 4;
+            }
+            
+            const interest = principal * (rate / 100) * (days / 365);
+            const total = principal + interest;
+            
+            document.getElementById('overdue-result-principal').textContent = '¥' + principal.toLocaleString();
+            document.getElementById('overdue-result-days').textContent = days + '天';
+            document.getElementById('overdue-result-rate').textContent = rate + '%';
+            document.getElementById('overdue-result-interest').textContent = '¥' + interest.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('overdue-result-total').textContent = '¥' + total.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            document.getElementById('overdue-result').classList.add('show');
+        }
+    </script>
+</body>
+</html>

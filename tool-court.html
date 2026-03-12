@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管辖法院查询 - 法律知识库</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #1557b0;
+            --success: #34a853;
+            --warning: #fbbc04;
+            --danger: #ea4335;
+            --light: #f8f9fa;
+            --dark: #1f1f1f;
+            --gray: #6c757d;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .nav {
+            background: white;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+        
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 5px;
+            list-style: none;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1a73e8 0%, #667eea 100%);
+            color: white 30px 20px;
+            text-align: center;
+            padding:;
+        }
+        
+        .header a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+        
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .result {
+            display: none;
+            margin-top: 25px;
+            padding: 25px;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-radius: 12px;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result h4 {
+            color: var(--primary: 15px);
+            margin-bottom;
+            font-size: 1.1rem;
+        }
+        
+        .court-level {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .court-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .court-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .info-box {
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+        
+        .info-box h5 {
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .info-box p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+        
+        .highlight-box {
+            background: #fff3e0;
+            border-left: 4px solid var(--warning);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 15px;
+        }
+        
+        .highlight-box p {
+            margin: 5px 0;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .form-section {
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        .footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 50px;
+        }
+        
+        @media (max-width: 768px) {
+            .court-level {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="index.html" class="nav-logo">⚖️ Legal Hub</a>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="tool-compensation.html">赔偿计算</a></li>
+                <li><a href="tool-interest.html">利息计算</a></li>
+                <li><a href="tool-date.html">时效计算</a></li>
+                <li><a href="tool-court.html" style="color: var(--primary);">管辖法院</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <header class="header">
+        <a href="index.html">← 返回首页</a>
+        <h1>🏛️ 管辖法院查询</h1>
+        <p>快速确定案件管辖法院</p>
+    </header>
+    
+    <div class="container">
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" data-tab="civil">民事管辖</div>
+            <div class="tab" data-tab="traffic">交通事故</div>
+            <div class="tab" data-tab="labor">劳动争议</div>
+        </div>
+        
+        <!-- Civil -->
+        <div class="form-section active" id="civil">
+            <div class="card">
+                <h3>⚖️ 民事案件管辖法院</h3>
+                
+                <div class="form-group">
+                    <label>案件类型</label>
+                    <select id="civil-type">
+                        <option value="contract">合同纠纷</option>
+                        <option value="tort">侵权纠纷</option>
+                        <option value="marriage">婚姻家庭</option>
+                        <option value="property">物权纠纷</option>
+                        <option value="inheritance">继承纠纷</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>原告住所地（可选）</label>
+                    <input type="text" id="civil-plaintiff" placeholder="如：上海市浦东新区">
+                </div>
+                
+                <div class="form-group">
+                    <label>被告住所地 *</label>
+                    <input type="text" id="civil-defendant" placeholder="如：北京市朝阳区" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>合同履行地/侵权行为地（可选）</label>
+                    <input type="text" id="civil-location" placeholder="如：合同签订地、侵权行为地">
+                </div>
+                
+                <button class="btn" onclick="calculateCivil()">查询管辖法院</button>
+                
+                <div class="result" id="civil-result">
+                    <h4>📍 管辖法院确定</h4>
+                    
+                    <div class="court-level">
+                        <div class="court-btn active" id="court-basic">基层法院</div>
+                        <div class="court-btn" id="court-intermediate">中级法院</div>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h5>📌 被告住所地法院</h5>
+                        <p id="civil-defendant-court">-</p>
+                    </div>
+                    
+                    <div class="info-box" id="civil-optional-box" style="display: none;">
+                        <h5>📌 可选管辖法院</h5>
+                        <p id="civil-optional-court">-</p>
+                    </div>
+                    
+                    <div class="highlight-box" id="civil-notes">
+                        <p><strong>💡 提示：</strong></p>
+                        <p id="civil-note-text">-</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Traffic -->
+        <div class="form-section" id="traffic">
+            <div class="card">
+                <h3>🚗 交通事故管辖法院</h3>
+                
+                <div class="form-group">
+                    <label>事故发生地 *</label>
+                    <input type="text" id="traffic-location" placeholder="如：上海市">
+                </div>
+                
+                <div class="form-group">
+                    <label>被告住所地</label>
+                    <input type="text" id="traffic-defendant" placeholder="被告住所地（可选）">
+                </div>
+                
+                <button class="btn" onclick="calculateTraffic()">查询管辖法院</button>
+                
+                <div class="result" id="traffic-result">
+                    <h4>📍 管辖法院确定</h4>
+                    
+                    <div class="info-box">
+                        <h5>📌 首选管辖法院</h5>
+                        <p id="traffic-primary-court">事故发生地基层人民法院</p>
+                    </div>
+                    
+                    <div class="info-box" id="traffic-optional-box" style="display: none;">
+                        <h5>📌 可选管辖法院</h5>
+                        <p id="traffic-optional-court">-</p>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <p><strong>💡 特别提示：</strong></p>
+                        <p>交通事故案件由事故发生地或被告住所地法院管辖。</p>
+                        <p>涉及财产损失的，也可向保险公司所在地法院起诉。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Labor -->
+        <div class="form-section" id="labor">
+            <div class="card">
+                <h3>👷 劳动争议管辖法院</h3>
+                
+                <div class="form-group">
+                    <label>用人单位所在地 *</label>
+                    <input type="text" id="labor-employer" placeholder="如：北京市海淀区">
+                </div>
+                
+                <div class="form-group">
+                    <label>劳动合同履行地</label>
+                    <input type="text" id="labor-location" placeholder="如：合同实际履行地（可选）">
+                </div>
+                
+                <button class="btn" onclick="calculateLabor()">查询管辖法院</button>
+                
+                <div class="result" id="labor-result">
+                    <h4>📍 劳动争议管辖</h4>
+                    
+                    <div class="info-box">
+                        <h5>📌 仲裁前置</h5>
+                        <p>劳动争议须先经过劳动仲裁，对仲裁裁决不服的才能向法院起诉。</p>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h5>📌 管辖法院</h5>
+                        <p id="labor-court">-</p>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <p><strong>💡 仲裁管辖规则：</strong></p>
+                        <p>劳动争议由劳动合同履行地或用人单位所在地的劳动争议仲裁委员会管辖。</p>
+                        <p>对仲裁裁决不服的，向基层人民法院起诉。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Reference -->
+        <div class="card">
+            <h3>📖 管辖法院小知识</h3>
+            
+            <div class="info-box">
+                <h5>🏛️ 基层人民法院</h5>
+                <p>审理第一审民事案件（除另有规定外），包括婚姻家庭、合同纠纷、侵权纠纷等。</p>
+            </div>
+            
+            <div class="info-box">
+                <h5>⚖️ 中级人民法院</h5>
+                <p>审理重大涉外案件、在本辖区有重大影响的案件、专利纠纷等案件，以及上诉案件。</p>
+            </div>
+            
+            <div class="info-box">
+                <h5>📌 级别管辖</h5>
+                <p>标的额较大的案件、知识产权案件、涉外案件等由中级以上人民法院管辖。</p>
+            </div>
+            
+            <div class="highlight-box">
+                <p><strong>⚠️ 管辖权异议：</strong></p>
+                <p>被告可在答辩期内向法院提出管辖权异议。</p>
+                <p>当事人可以在纠纷发生前协议选择管辖法院（但有限制）。</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>© 2026 法律知识库 | Wayne's Legal Hub</p>
+    </footer>
+    
+    <script>
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+                
+                this.classList.add('active');
+                document.getElementById(this.dataset.tab).classList.add('active');
+            });
+        });
+        
+        function calculateCivil() {
+            const type = document.getElementById('civil-type').value;
+            const defendant = document.getElementById('civil-defendant').value;
+            const plaintiff = document.getElementById('civil-plaintiff').value;
+            const location = document.getElementById('civil-location').value;
+            
+            if (!defendant) {
+                alert('请输入被告住所地');
+                return;
+            }
+            
+            let court = defendant + '人民法院';
+            let optionalCourt = '';
+            let note = '';
+            
+            switch(type) {
+                case 'contract':
+                    optionalCourt = location ? location + '人民法院（合同履行地）' : '';
+                    note = '合同纠纷由被告住所地或合同履行地法院管辖。';
+                    break;
+                case 'tort':
+                    optionalCourt = location ? location + '人民法院（侵权行为地）' : '';
+                    note = '侵权纠纷由被告住所地或侵权行为地法院管辖。';
+                    break;
+                case 'marriage':
+                    note = '婚姻家庭纠纷由被告住所地或婚姻登记地法院管辖。';
+                    break;
+                case 'property':
+                    note = '不动产纠纷由不动产所在地法院专属管辖。';
+                    break;
+                case 'inheritance':
+                    note = '继承纠纷由被继承人死亡时住所地或主要遗产所在地法院管辖。';
+                    break;
+            }
+            
+            document.getElementById('civil-defendant-court').textContent = court;
+            
+            if (optionalCourt) {
+                document.getElementById('civil-optional-box').style.display = 'block';
+                document.getElementById('civil-optional-court').textContent = optionalCourt;
+            } else {
+                document.getElementById('civil-optional-box').style.display = 'none';
+            }
+            
+            document.getElementById('civil-note-text').textContent = note;
+            document.getElementById('civil-result').classList.add('show');
+        }
+        
+        function calculateTraffic() {
+            const location = document.getElementById('traffic-location').value;
+            const defendant = document.getElementById('traffic-defendant').value;
+            
+            if (!location) {
+                alert('请输入事故发生地');
+                return;
+            }
+            
+            let optionalCourt = '';
+            if (defendant) {
+                optionalCourt = defendant + '人民法院（被告住所地）';
+                document.getElementById('traffic-optional-box').style.display = 'block';
+                document.getElementById('traffic-optional-court').textContent = optionalCourt;
+            } else {
+                document.getElementById('traffic-optional-box').style.display = 'none';
+            }
+            
+            document.getElementById('traffic-result').classList.add('show');
+        }
+        
+        function calculateLabor() {
+            const employer = document.getElementById('labor-employer').value;
+            const location = document.getElementById('labor-location').value;
+            
+            if (!employer) {
+                alert('请输入用人单位所在地');
+                return;
+            }
+            
+            let court = employer + '基层人民法院';
+            if (location) {
+                court += ' 或 " + location + " 基层人民法院（劳动合同履行地）";
+            }
+            
+            document.getElementById('labor-court').textContent = court;
+            document.getElementById('labor-result').classList.add('show');
+        }
+    </script>
+</body>
+</html>

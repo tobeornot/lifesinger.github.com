@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>劳动法 - 法律知识库</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff9800;
+            --primary-dark: #f57c00;
+            --dark: #1f1f1f;
+            --gray: #6c757d;
+            --light: #f8f9fa;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Sans SC', sans-serif; background: var(--light); color: var(--dark); line-height: 1.8; }
+        .nav { background: white; padding: 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .nav-content { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; height: 60px; }
+        .nav-logo { font-weight: 700; font-size: 1.2rem; color: var(--primary); text-decoration: none; }
+        .nav-links { display: flex; gap: 5px; list-style: none; }
+        .nav-links a { color: var(--dark); text-decoration: none; font-weight: 500; padding: 8px 16px; border-radius: 8px; }
+        .header { background: linear-gradient(135deg, #ff9800 0%, #ffc107 100%); color: white; padding: 40px 20px; text-align: center; }
+        .header a { color: white; text-decoration: none; }
+        .container { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+        .card { background: white; border-radius: 16px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 25px; }
+        .card h2 { color: var(--primary); margin-bottom: 20px; font-size: 1.5rem; }
+        .card h3 { color: var(--dark); margin: 25px 0 15px; font-size: 1.2rem; border-left: 4px solid var(--primary); padding-left: 15px; }
+        .law-item { background: #fff8e1; border-radius: 12px; padding: 20px; margin-bottom: 15px; }
+        .law-item h4 { color: var(--primary-dark); margin-bottom: 10px; }
+        .law-item p { margin-bottom: 10px; color: var(--gray); }
+        .tag { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin-right: 8px; }
+        .tag-imp { background: #ffebee; color: #c62828; }
+        .tag-new { background: #e8f5e9; color: #2e7d32; }
+        .highlight-box { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 20px; border-radius: 0 12px 12px 0; margin: 20px 0; }
+        .process { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+        .process-step { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; border-left: 4px solid var(--primary); }
+        .process-step-num { width: 30px; height: 30px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .footer { background: var(--dark); color: white; text-align: center; padding: 30px 20px; margin-top: 50px; }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="../../index.html" class="nav-logo">⚖️ Legal Hub</a>
+            <ul class="nav-links">
+                <li><a href="../../index.html">首页</a></li>
+                <li><a href="../../tool-compensation.html">赔偿计算</a></li>
+                <li><a href="../../tool-interest.html">利息计算</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <header class="header">
+        <a href="../../index.html">← 返回首页</a>
+        <h1>👷 劳动法 - 劳动合同法</h1>
+        <p>劳动合同、工资、工伤的核心法律规定</p>
+    </header>
+    
+    <div class="container">
+        <div class="card">
+            <h2>📋 劳动合同</h2>
+            
+            <h3>一、劳动合同类型</h3>
+            <div class="law-item">
+                <h4>固定期限劳动合同</h4>
+                <p>用人单位与劳动者约定合同终止时间的劳动合同。</p>
+            </div>
+            
+            <div class="law-item">
+                <h4>无固定期限劳动合同</h4>
+                <p>用人单位与劳动者约定无确定终止时间的劳动合同。</p>
+                <p><span class="tag tag-imp">必须签订</span>：</p>
+                <p>1. 劳动者连续工作满十年的</p>
+                <p>2. 用人单位初次实行劳动合同制度或者国有企业改制重新订立劳动合同，劳动者连续工作满十年且距法定退休年龄不足十年的</p>
+                <p>3. 连续订立二次固定期限劳动合同，且劳动者没有违法违纪行为</p>
+            </div>
+            
+            <h3>二、试用期规定</h3>
+            <div class="law-item">
+                <p><strong>试用期期限</strong>：</p>
+                <p>劳动合同期限三个月以上不满一年的，试用期不得超过一个月</p>
+                <p>一年以上不满三年的，试用期不得超过二个月</p>
+                <p>三年以上固定期限和无固定期限的，试用期不得超过六个月</p>
+                <p><span class="tag tag-new">重要</span> 试用期工资不得低于合同约定工资的80%。</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>💰 工资与工时</h2>
+            
+            <h3>一、工资支付</h3>
+            <div class="law-item">
+                <p>工资应当以货币形式按月支付给劳动者本人。</p>
+                <p>不得克扣或者无故拖欠劳动者的工资。</p>
+                <p><span class="tag tag-imp">最低工资</span>：用人单位支付劳动者的工资不得低于当地最低工资标准。</p>
+            </div>
+            
+            <h3>二、工作时间</h3>
+            <div class="law-item">
+                <p><strong>标准工时</strong>：每日工作8小时，每周工作40小时。</p>
+                <p><strong>延长工作时间</strong>：一般每日不得超过1小时，因特殊原因每日不得超过3小时，但每月不得超过36小时。</p>
+                <p><strong>加班工资</strong>：</p>
+                <p>工作日加班：按工资的150%支付</p>
+                <p>休息日加班：按工资的200%支付（可安排补休）</p>
+                <p>法定节假日加班：按工资的300%支付</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>⚠️ 工伤保险</h2>
+            
+            <h3>一、工伤认定</h3>
+            <div class="law-item">
+                <p>应当认定为工伤的情形：</p>
+                <p>1. 在工作时间和工作场所内，因工作原因受到事故伤害的</p>
+                <p>2. 工作时间前后在工作场所内，从事与工作有关的预备性或者收尾性工作受到事故伤害的</p>
+                <p>3. 在工作时间和工作场所内，因履行工作职责受到暴力等意外伤害的</p>
+                <p>4. 患职业病的</p>
+                <p>5. 因工外出期间，由于工作原因受到伤害或者发生事故下落不明的</p>
+                <p>6. 在上下班途中，受到非本人主要责任的交通事故伤害的</p>
+            </div>
+            
+            <h3>二、工伤待遇</h3>
+            <div class="law-item">
+                <p>1. 医疗待遇：治疗工伤所需费用符合工伤保险诊疗项目目录的，由工伤保险基金支付</p>
+                <p>2. 停工留薪期：原工资福利待遇不变，由所在单位按月支付</p>
+                <p>3. 伤残待遇：根据伤残等级享受一次性伤残补助金等</p>
+                <p>4. 工亡待遇：丧葬补助金、供养亲属抚恤金、一次性工亡补助金</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>🔄 劳动争议处理</h2>
+            
+            <h3>劳动争议处理流程</h3>
+            <div class="process">
+                <div class="process-step">
+                    <div class="process-step-num">1</div>
+                    <div>
+                        <strong>劳动争议仲裁</strong>
+                        <p style="margin:0; color:var(--gray);">向劳动合同履行地或用人单位所在地的劳动争议仲裁委员会申请仲裁</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-num">2</div>
+                    <div>
+                        <strong>仲裁裁决</strong>
+                        <p style="margin:0; color:var(--gray);">仲裁委员会自收到仲裁申请之日起45日内作出裁决</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-num">3</div>
+                    <div>
+                        <strong>向法院起诉</strong>
+                        <p style="margin:0; color:var(--gray);">对仲裁裁决不服的，自收到仲裁裁决书之日起15日内向基层人民法院起诉</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <p><strong>💡 实务提示</strong></p>
+                <p>1. 劳动争议仲裁前置，必须先申请仲裁才能向法院起诉。</p>
+                <p>2. 仲裁时效期间为一年，从当事人知道或者应当知道其权利被侵害之日起计算。</p>
+                <p>3. 劳动关系存续期间因拖欠劳动报酬发生争议的，劳动者申请仲裁不受仲裁时效限制。</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>© 2026 法律知识库 | Wayne's Legal Hub</p>
+    </footer>
+</body>
+</html>
