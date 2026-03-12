@@ -41,7 +41,7 @@
         }
         
         /* 夜间模式开关 */
-        .dark-toggle { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; border-radius: 50%; background: #333; color: white; border: none; cursor: pointer; font-size: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 9999; }
+        .header-btn { display: none; position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; border-radius: 50%; background: #333; color: white; border: none; cursor: pointer; font-size: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 9999; }
         .dark-toggle:hover { transform: scale(1.1); }
 
             --primary: #1a73e8;
@@ -600,6 +600,7 @@
     
     <!-- Header -->
     <header class="header">
+        <button onclick="toggleDark()" style="position:absolute;top:15px;right:20px;padding:8px 15px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:20px;color:white;cursor:pointer;">🌙 夜间模式</button>
         <div class="header-content">
             <div class="avatar">⚖️</div>
             <h1>法律库</h1>
@@ -816,10 +817,5 @@
     });
     </script>
 
-<button class="dark-toggle" onclick="toggleDark()">🌙</button>
-    <script>
-    function toggleDark() {
-        document.body.classList.toggle('dark-mode');
-    }
-    </script></body>
+</body>
 </html>
