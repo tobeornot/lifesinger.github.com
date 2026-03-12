@@ -20,6 +20,22 @@
     
     <style>
         :root {
+        /* 夜间模式 */
+        @media (prefers-color-scheme: dark) {
+            body { background: #1a1a1a; color: #e0e0e0; }
+            .nav { background: #2d2d2d; }
+            .nav-links a, .nav-logo { color: #e0e0e0 !important; }
+            .header { background: linear-gradient(135deg, #1a4a1a 0%, #2d5a2d 100%); }
+            .tool-card, .category-card, .card, .law-card { background: #2d2d2d; color: #e0e0e0; }
+            .tool-card p, .category-info p, .info-box p { color: #aaa; }
+            .footer { background: #111; }
+            .section-title h2 { color: #e0e0e0; }
+        }
+        
+        /* 夜间模式开关 */
+        .dark-toggle { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; border-radius: 50%; background: #333; color: white; border: none; cursor: pointer; font-size: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 9999; }
+        .dark-toggle:hover { transform: scale(1.1); }
+
             --primary: #1a73e8;
             --primary-dark: #1557b0;
             --secondary: #fbbc04;
@@ -792,5 +808,10 @@
     });
     </script>
 
-</body>
+<button class="dark-toggle" onclick="toggleDark()">🌙</button>
+    <script>
+    function toggleDark() {
+        document.body.classList.toggle('dark-mode');
+    }
+    </script></body>
 </html>
