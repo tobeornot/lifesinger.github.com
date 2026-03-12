@@ -37,6 +37,28 @@
         .process-step { display: flex; align-items: center; gap: 15px; padding: 15px; background: white; border-radius: 10px; border-left: 4px solid var(--primary); }
         .process-step-num { width: 30px; height: 30px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .footer { background: var(--dark); color: white; text-align: center; padding: 30px 20px; margin-top: 50px; }
+        /* Mobile Navigation */
+        @media (max-width: 768px) {
+            .nav-content {
+                padding: 0 10px !important;
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+            .nav-links {
+                display: flex !important;
+                gap: 5px !important;
+                padding: 5px 0;
+            }
+            .nav-links a {
+                padding: 6px 10px !important;
+                font-size: 0.85rem;
+            }
+            .nav-logo {
+                font-size: 1rem !important;
+                flex-shrink: 0;
+            }
+        }
     </style>
 </head>
 <body>

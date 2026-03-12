@@ -34,6 +34,28 @@
         .tag-new { background: #e8f5e9; color: #2e7d32; }
         .highlight-box { background: #fff3e0; border-left: 4px solid #ff9800; padding: 20px; border-radius: 0 12px 12px 0; margin: 20px 0; }
         .footer { background: var(--dark); color: white; text-align: center; padding: 30px 20px; margin-top: 50px; }
+        /* Mobile Navigation */
+        @media (max-width: 768px) {
+            .nav-content {
+                padding: 0 10px !important;
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+            .nav-links {
+                display: flex !important;
+                gap: 5px !important;
+                padding: 5px 0;
+            }
+            .nav-links a {
+                padding: 6px 10px !important;
+                font-size: 0.85rem;
+            }
+            .nav-logo {
+                font-size: 1rem !important;
+                flex-shrink: 0;
+            }
+        }
     </style>
 </head>
 <body>
